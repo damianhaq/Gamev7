@@ -14,17 +14,17 @@ export class Player extends Character {
   moving() {
     const diagonalSpeed = this.movementSpeed / Math.sqrt(2); // prędkość na ukos
 
-    // if (keys.a || keys.d || keys.w || keys.s) {
-    //   if (this.animData.animState !== "run") this.animData.animState = "run";
-    // } else {
-    //   if (this.animData.animState !== "idle") this.animData.animState = "idle";
-    // }
+    if (keys.a || keys.d || keys.w || keys.s) {
+      if (this.anim.state !== "run") this.anim.state = "run";
+    } else {
+      if (this.anim.state !== "idle") this.anim.state = "idle";
+    }
 
-    // if (keys.d) {
-    //   if (this.animData.xFlip === true) this.animData.xFlip = false;
-    // } else if (keys.a) {
-    //   if (this.animData.xFlip === false) this.animData.xFlip = true;
-    // }
+    if (keys.d) {
+      if (this.anim.xAxisFlip === true) this.anim.xAxisFlip = false;
+    } else if (keys.a) {
+      if (this.anim.xAxisFlip === false) this.anim.xAxisFlip = true;
+    }
 
     if (keys.a && keys.w) {
       this.x -= diagonalSpeed;

@@ -13,25 +13,18 @@ export class Character {
       currentFrame: 0,
       frameDelayMS: 100,
       currentFrameDelayMS: 0,
+      xAxisFlip: true,
     };
   }
 
   update(deltaTime) {
-    // let fixedPosX =
-    //   this.x +
-    //   dimensions.map.x -
-    //   this.spriteSheetData[this.animData.animState].w -
-    //   this.animData.addX;
+    c.save();
+    let fixedPosX = this.x - this.anim.spriteSheetData[this.anim.state].w / 2 + gameData.camera.x;
 
-    // if (this.animData.xFlip) {
-    //   c.scale(-1, 1); // Odbija rysunek wzdłuż osi Y
-    //   fixedPosX = -(
-    //     this.x +
-    //     dimensions.map.x +
-    //     this.spriteSheetData[this.animData.animState].w +
-    //     this.animData.addX
-    //   );
-    // }
+    if (this.anim.xAxisFlip) {
+      c.scale(-1, 1); // Odbija rysunek wzdłuż osi Y
+      fixedPosX = -(this.x + gameData.camera.x + this.anim.spriteSheetData[this.anim.state].w / 2);
+    }
 
     c.drawImage(
       spriteSheet,
@@ -40,7 +33,7 @@ export class Character {
       this.anim.spriteSheetData[this.anim.state].y,
       this.anim.spriteSheetData[this.anim.state].w,
       this.anim.spriteSheetData[this.anim.state].h,
-      this.x - this.anim.spriteSheetData[this.anim.state].w / 2 + gameData.camera.x,
+      fixedPosX,
       this.y - this.anim.spriteSheetData[this.anim.state].h / 2 + gameData.camera.y,
       this.anim.spriteSheetData[this.anim.state].w,
       this.anim.spriteSheetData[this.anim.state].h
@@ -57,6 +50,7 @@ export class Character {
         this.anim.currentFrame++;
       }
     }
+    c.restore();
 
     c.beginPath();
     c.arc(this.x + gameData.camera.x, this.y + gameData.camera.y, this.radius, 0, 2 * Math.PI);
