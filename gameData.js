@@ -31,11 +31,25 @@ export const spriteSheetData = {
       h: 22,
       frames: 4,
     },
+    run: {
+      x: 64,
+      y: 11,
+      w: 16,
+      h: 22,
+      frames: 4,
+    },
   },
   skeleton: {
     name: "Skeleton",
     idle: {
       x: 0,
+      y: 206,
+      w: 16,
+      h: 18,
+      frames: 4,
+    },
+    run: {
+      x: 64,
       y: 206,
       w: 16,
       h: 18,

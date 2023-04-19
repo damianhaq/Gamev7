@@ -1,18 +1,24 @@
-import { Enemy, Player } from "./Character.js";
-import { gameData, keys, spriteSheetData } from "./gameData.js";
+import { Enemy } from "./classes/Enemy.js";
+import { Player } from "./classes/Player.js";
+import { camera, controls, debug } from "./functions.js";
+import { gameData, spriteSheetData } from "./gameData.js";
 
 const canvas = document.querySelector("#canvas");
-export const debugP = document.querySelector("#debug");
 canvas.width = 1000;
 canvas.height = 800;
-
+export const debugP = document.querySelector("#debug");
 export const c = canvas.getContext("2d");
-
-c.imageSmoothingEnabled = false;
 c.scale(gameData.scale, gameData.scale);
+c.imageSmoothingEnabled = false;
+
+// ---- PRELOAD ----
+controls();
 
 export const spriteSheet = new Image();
 spriteSheet.src = "./assets/BigSpritev7.png";
+spriteSheet.onload = () => {
+  requestAnimationFrame(animate);
+};
 
 const player = new Player(
   canvas.width / 2 / gameData.scale,
@@ -22,74 +28,31 @@ const player = new Player(
 );
 const enemy = new Enemy(0, 0, 30, spriteSheetData.skeleton);
 
-controls();
-spriteSheet.onload = () => {
-  requestAnimationFrame(animate);
-};
+// ---- GAME LOOP ----
+let lastTime = 0;
+let deltaTime = 0;
+let counter = 0;
 
-function animate() {
+function animate(currentTime) {
+  counter++;
+  deltaTime = currentTime - lastTime;
+  lastTime = currentTime;
+  // const fps = Math.round(1000 / deltaTime);
+
   c.fillStyle = "#2e2e35";
   c.fillRect(0, 0, canvas.clientWidth, canvas.height);
   c.drawImage(spriteSheet, 0 + gameData.camera.x, 0 + gameData.camera.y);
 
-  enemy.update();
-  player.update();
-  player.moving();
+  enemy.update(deltaTime);
+  player.update(deltaTime);
+  player.moving(deltaTime);
 
   camera(player.x, player.y);
-
-  debug(
-    `Player: x:${player.x} y:${player.y}  Camera: x:${gameData.camera.x} y:${gameData.camera.y}`
-  );
+  if (counter % 100 === 0) {
+    debug(
+      `deltaTime:${deltaTime}   Player: x:${player.x} y:${player.y}  Camera: x:${gameData.camera.x} y:${gameData.camera.y}`
+    );
+  }
 
   requestAnimationFrame(animate);
-}
-
-function debug(string) {
-  if (debugP.innerHTML !== string) debugP.innerHTML = string;
-}
-
-export function controls() {
-  document.body.addEventListener("keydown", (ev) => {
-    if (ev.code === "KeyW") keys.w = true;
-    if (ev.code === "KeyS") keys.s = true;
-    if (ev.code === "KeyA") keys.a = true;
-    if (ev.code === "KeyD") keys.d = true;
-    if (ev.code === "Space") keys.space = true;
-    if (ev.code === "Escape") keys.escape = true;
-
-    // console.log(keys);
-  });
-
-  document.body.addEventListener("keyup", (ev) => {
-    if (ev.code === "KeyW") keys.w = false;
-    if (ev.code === "KeyS") keys.s = false;
-    if (ev.code === "KeyA") keys.a = false;
-    if (ev.code === "KeyD") keys.d = false;
-    if (ev.code === "Space") keys.space = false;
-    if (ev.code === "Escape") keys.escape = false;
-
-    // console.log(ev.code);
-  });
-
-  document.addEventListener("mousedown", (ev) => {
-    keys.mouse.click = true;
-    keys.mouse.x = ev.offsetX;
-    keys.mouse.y = ev.offsetY;
-  });
-
-  document.addEventListener("mouseup", (ev) => {
-    keys.mouse.click = false;
-  });
-
-  document.addEventListener("mousemove", (ev) => {
-    keys.mouse.x = ev.offsetX;
-    keys.mouse.y = ev.offsetY;
-  });
-}
-
-function camera(x, y) {
-  const center = { x: canvas.width / 2 / gameData.scale, y: canvas.height / 2 / gameData.scale };
-  gameData.camera.x = center.x + -x;
-  gameData.camera.y = center.y + -y;
 }
