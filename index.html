@@ -7,11 +7,15 @@
     <title>Document</title>
     <script type="module" defer src="app.js"></script>
     <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
   </head>
   <body>
     <div class="container">
       <div class="game">
         <canvas id="canvas"></canvas>
+      </div>
+      <div>
+        <p style="color: white" id="debug">asd</p>
       </div>
       <div class="patchnotes">
         <h1>Aktualizacje</h1>
@@ -23,19 +27,32 @@
           <div class="content">
             <ul>
               <li>Wyświetlanie aktualizacji</li>
-              <li>Wyświetlanie aktualizacji</li>
             </ul>
           </div>
         </div>
         <div class="note">
           <div class="titleBar">
             <p>Start</p>
-            <p>18.04.2023</p>
+            <p>19.04.2023</p>
           </div>
           <div class="content">
             <ul>
-              <li>Wyświetlanie aktualizacji</li>
-              <li>Wyświetlanie aktualizacji</li>
+              <li>
+                Poszukałem moich ulubionych assetów i pobawiłem się troche w Aseprite żeby zrobić
+                jeden spritesheet
+              </li>
+              <li>Utworzenie klasy Character i podklasy Plater i Enemy</li>
+              <li>Pobieranie i wyświetlanie tekstury, pierwszej klatki animacji</li>
+              <li>
+                Kamera, gracz jest wycentrowany i cała reszta się odpowiednio przesuwa względem
+                pozycji gracza
+              </li>
+              <li>Próba zrobienia ikony w przeglądarce, nie wyszło, zostawiam to na kiedyś</li>
+              <li>
+                Animacja na podstawie czasu delta, czyli 100ms zawsze będzie 100ms nawet jeśli gra
+                będzie zamulać
+              </li>
+              <li></li>
             </ul>
           </div>
         </div>
