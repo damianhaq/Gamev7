@@ -1,7 +1,8 @@
 import { Enemy } from "./classes/Enemy.js";
+import { Item } from "./classes/Item.js";
 import { Player } from "./classes/Player.js";
 import { camera, controls, debug } from "./functions.js";
-import { gameData, spriteSheetData } from "./gameData.js";
+import { gameData, spriteSheetData, weapons } from "./gameData.js";
 
 const canvas = document.querySelector("#canvas");
 canvas.width = 1000;
@@ -24,9 +25,12 @@ const player = new Player(
   canvas.width / 2 / gameData.scale,
   canvas.height / 2 / gameData.scale,
   20,
-  spriteSheetData.purpleKnight
+  spriteSheetData.purpleKnight,
+  weapons.silverSword
 );
 const enemy = new Enemy(0, 0, 30, spriteSheetData.skeleton);
+const items = [];
+items.push(new Item(50, 50, spriteSheetData.items.weapons.silverSword, false, 0, "0"));
 
 // ---- GAME LOOP ----
 let lastTime = 0;
@@ -46,6 +50,7 @@ function animate(currentTime) {
   enemy.update(deltaTime);
   player.update(deltaTime);
   player.moving(deltaTime);
+  items.forEach((item) => item.update());
 
   camera(player.x, player.y);
   if (counter % 100 === 0) {

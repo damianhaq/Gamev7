@@ -1,13 +1,12 @@
 import { Character } from "./Character.js";
 
 export class Enemy extends Character {
-  constructor(x, y, radius, spriteSheetData) {
-    super(x, y, radius, spriteSheetData);
+  constructor(x, y, radius, spriteSheetData, weaponData) {
+    super();
     this.x = x;
     this.y = y;
     this.radius = radius;
-    this.anim.spriteSheetData = spriteSheetData;
-
-    this.movementSpeed = 1;
+    this.spriteSheetData = spriteSheetData;
+    this.weaponData = weaponData;
   }
 }

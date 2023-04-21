@@ -1,4 +1,4 @@
-import { debugP } from "./app.js";
+import { c, debugP, spriteSheet } from "./app.js";
 import { gameData, keys } from "./gameData.js";
 
 export function camera(x, y) {
@@ -48,4 +48,41 @@ export function controls() {
     keys.mouse.x = ev.offsetX;
     keys.mouse.y = ev.offsetY;
   });
+}
+
+export function drawSprite(spriteSheetData, x, y, originX, originY, angleDeg, isXAxisFlip) {
+  // const posx = 15;
+  // const posy = 2; /*+ this.anim.currentFrame */
+
+  // const originX = this.weaponData.sprite.w / 2;
+  // const originY = this.weaponData.sprite.h / 2;
+
+  // this.weapon.rotationAngle += 1;
+  c.save();
+
+  // let fixedPosX = this.x - this.weaponData.sprite.w / 2 + gameData.camera.x;
+
+  if (isXAxisFlip) {
+    c.scale(-1, 1); // Odbija rysunek wzdłuż osi Y
+    // fixedPosX = -(this.x + this.weaponData.sprite.w / 2 + gameData.camera.x);
+    c.translate(-(x + gameData.camera.x), y + gameData.camera.y);
+    c.rotate(-((angleDeg * Math.PI) / 180));
+  } else {
+    c.translate(x + gameData.camera.x, y + gameData.camera.y);
+    c.rotate((angleDeg * Math.PI) / 180);
+  }
+
+  c.drawImage(
+    spriteSheet,
+    spriteSheetData.x,
+    spriteSheetData.y,
+    spriteSheetData.w,
+    spriteSheetData.h,
+    -originX,
+    -originY,
+    spriteSheetData.w,
+    spriteSheetData.h
+  );
+
+  c.restore();
 }
