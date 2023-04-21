@@ -56,4 +56,24 @@ export const spriteSheetData = {
       frames: 4,
     },
   },
+  items: {
+    weapons: {
+      silverSword: {
+        name: "Silver Sword",
+        x: 195,
+        y: 882,
+        w: 10,
+        h: 29,
+      },
+    },
+  },
+};
+
+export const weapons = {
+  silverSword: {
+    sprite: spriteSheetData.items.weapons.silverSword,
+    name: "Silver Sword",
+    dmg: 10,
+    attackSpeed: 5,
+  },
 };

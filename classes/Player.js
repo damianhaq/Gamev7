@@ -2,13 +2,15 @@ import { keys } from "../gameData.js";
 import { Character } from "./Character.js";
 
 export class Player extends Character {
-  constructor(x, y, radius, spriteSheetData) {
-    super(x, y, radius, spriteSheetData);
+  // TODO: oddaj parametr weapon: null lub weapon data
+  constructor(x, y, radius, spriteSheetData, weaponData) {
+    super();
     this.x = x;
     this.y = y;
     this.radius = radius;
-    this.anim.spriteSheetData = spriteSheetData;
-    this.movementSpeed = 1;
+    this.spriteSheetData = spriteSheetData;
+    this.weaponData = weaponData;
+    console.log(this.weaponData);
   }
 
   moving() {
