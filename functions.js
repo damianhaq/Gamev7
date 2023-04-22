@@ -36,8 +36,8 @@ export function controls() {
 
   document.addEventListener("mousedown", (ev) => {
     keys.mouse.click = true;
-    keys.mouse.x = ev.offsetX;
-    keys.mouse.y = ev.offsetY;
+    keys.mouse.x = ev.offsetX / gameData.scale;
+    keys.mouse.y = ev.offsetY / gameData.scale;
   });
 
   document.addEventListener("mouseup", (ev) => {
@@ -45,8 +45,8 @@ export function controls() {
   });
 
   document.addEventListener("mousemove", (ev) => {
-    keys.mouse.x = ev.offsetX;
-    keys.mouse.y = ev.offsetY;
+    keys.mouse.x = ev.offsetX / gameData.scale;
+    keys.mouse.y = ev.offsetY / gameData.scale;
   });
 }
 
@@ -84,5 +84,27 @@ export function drawSprite(spriteSheetData, x, y, originX, originY, angleDeg, is
     spriteSheetData.h
   );
 
+  if (gameData.showHitBox) {
+    c.beginPath();
+    c.rect(-originX, -originY, spriteSheetData.w, spriteSheetData.h);
+    c.stroke();
+  }
   c.restore();
+}
+
+export function calculateDirection(fromX, fromY, toX, toY) {
+  const dx = toX - fromX;
+  const dy = toY - fromY;
+
+  const length = Math.sqrt(dx * dx + dy * dy);
+  const directionX = dx / length;
+  const directionY = dy / length;
+
+  return { x: directionX, y: directionY };
+}
+
+export function getAngleBetweenPoints(x1, y1, x2, y2) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  return (Math.atan2(dy, dx) * 180) / Math.PI;
 }

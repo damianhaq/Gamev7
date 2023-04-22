@@ -1,8 +1,8 @@
-import { keys } from "../gameData.js";
+import { calculateDirection, getAngleBetweenPoints } from "../functions.js";
+import { gameData, keys } from "../gameData.js";
 import { Character } from "./Character.js";
 
 export class Player extends Character {
-  // TODO: oddaj parametr weapon: null lub weapon data
   constructor(x, y, radius, spriteSheetData, weaponData) {
     super();
     this.x = x;
@@ -10,7 +10,41 @@ export class Player extends Character {
     this.radius = radius;
     this.spriteSheetData = spriteSheetData;
     this.weaponData = weaponData;
-    console.log(this.weaponData);
+    // console.log(this.weaponData);
+
+    this.weapon.rotationPoint.x = this.weaponData.sprite.w / 2;
+    this.weapon.rotationPoint.y = this.weaponData.sprite.h;
+  }
+
+  toUpdate(deltaTime) {
+    this.moving(deltaTime);
+
+    if (keys.mouse.click && this.animAttack.currentDuration === 0) {
+      // once per attack
+      this.animAttack.isAttacking = true;
+
+      const angle = getAngleBetweenPoints(
+        this.x + gameData.camera.x,
+        this.y + gameData.camera.y,
+        keys.mouse.x,
+        keys.mouse.y
+      );
+      this.weapon.rotationAngle = angle;
+    }
+
+    if (this.animAttack.isAttacking && this.animAttack.currentDuration < this.animAttack.duration) {
+      this.animAttack.currentDuration += deltaTime;
+
+      if (this.animAttack.currentDuration > this.animAttack.duration) {
+        /* this if (!keys.mouse.click) is for not showing "not attacking weapon" in one frame.
+        Because now when i still holding LMB, isAttacking is always true, its not false for 1 frame */
+        if (!keys.mouse.click) this.animAttack.isAttacking = false;
+        this.animAttack.currentDuration = 0;
+        // console.log("attack");
+      }
+
+      this.attack(this.weapon.rotationAngle);
+    }
   }
 
   moving() {

@@ -13,7 +13,6 @@ c.scale(gameData.scale, gameData.scale);
 c.imageSmoothingEnabled = false;
 
 // ---- PRELOAD ----
-controls();
 
 export const spriteSheet = new Image();
 spriteSheet.src = "./assets/BigSpritev7.png";
@@ -24,11 +23,13 @@ spriteSheet.onload = () => {
 const player = new Player(
   canvas.width / 2 / gameData.scale,
   canvas.height / 2 / gameData.scale,
-  20,
+  8,
   spriteSheetData.purpleKnight,
   weapons.silverSword
 );
-const enemy = new Enemy(0, 0, 30, spriteSheetData.skeleton);
+controls();
+const enemy = new Enemy(0, 0, 8, spriteSheetData.skeleton, weapons.heavyMace);
+const enemy2 = new Enemy(100, 100, 8, spriteSheetData.orcInMask, weapons.spear);
 const items = [];
 items.push(new Item(50, 50, spriteSheetData.items.weapons.silverSword, false, 0, "0"));
 
@@ -45,11 +46,11 @@ function animate(currentTime) {
 
   c.fillStyle = "#2e2e35";
   c.fillRect(0, 0, canvas.clientWidth, canvas.height);
-  c.drawImage(spriteSheet, 0 + gameData.camera.x, 0 + gameData.camera.y);
+  // c.drawImage(spriteSheet, 0 + gameData.camera.x, 0 + gameData.camera.y);
 
   enemy.update(deltaTime);
+  enemy2.update(deltaTime);
   player.update(deltaTime);
-  player.moving(deltaTime);
   items.forEach((item) => item.update());
 
   camera(player.x, player.y);
