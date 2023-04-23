@@ -10,6 +10,9 @@ export class Character {
     this.spriteSheetData = null;
     this.movementSpeed = 1;
 
+    this.group = null;
+    this.text = null;
+
     this.anim = {
       state: "idle",
       currentFrame: 0,
@@ -46,9 +49,18 @@ export class Character {
 
     this.drawMe(deltaTime);
     this.toUpdate(deltaTime);
+    if (this.text) this.drawText();
   }
 
   toUpdate(deltaTime) {}
+
+  drawText() {
+    c.save();
+    c.fillStyle = "white";
+    // c.font = "16px sans";
+    c.fillText(this.text, this.x + gameData.camera.x, this.y + gameData.camera.y);
+    c.restore();
+  }
 
   drawWeapon() {
     // attack
@@ -105,13 +117,13 @@ export class Character {
     );
   }
 
-  attack(angle) {
+  attack() {
     this.weapon.rotationAngle += this.weapon.angleChangeSpeed;
     // console.log("attack in character");
 
-    c.beginPath();
-    c.arc(keys.mouse.x, keys.mouse.y, 5, 0, Math.PI * 2);
-    c.stroke();
+    // c.beginPath();
+    // c.arc(keys.mouse.x, keys.mouse.y, 5, 0, Math.PI * 2);
+    // c.stroke();
   }
 
   drawMe(deltaTime) {

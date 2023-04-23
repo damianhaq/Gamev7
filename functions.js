@@ -103,8 +103,32 @@ export function calculateDirection(fromX, fromY, toX, toY) {
   return { x: directionX, y: directionY };
 }
 
+export function calculateDistance(fromX, fromY, fromRadius, toX, toY, toRadius) {
+  let distance = Math.sqrt((fromX - toX) ** 2 + (fromY - toY) ** 2);
+  distance = distance - fromRadius - toRadius;
+  return distance;
+}
+
 export function getAngleBetweenPoints(x1, y1, x2, y2) {
   const dx = x2 - x1;
   const dy = y2 - y1;
   return (Math.atan2(dy, dx) * 180) / Math.PI;
+}
+
+export function findNearestEnemy(player) {
+  let nearestEnemy = null;
+  let nearestDistance = Number.MAX_VALUE;
+
+  for (const enemy of instances.enemiesCh) {
+    let distance;
+    if (player) {
+      distance = Math.sqrt((enemy.x - player.x) ** 2 + (enemy.y - player.y) ** 2);
+    }
+
+    if (distance < nearestDistance) {
+      nearestEnemy = enemy;
+      nearestDistance = distance;
+    }
+  }
+  return nearestEnemy;
 }

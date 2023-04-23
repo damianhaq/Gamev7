@@ -22,6 +22,18 @@ export const keys = {
   },
 };
 
+export const variables = {
+  characterGroups: {
+    ally: "ally",
+    enemy: "enemy",
+  },
+  tasks: {
+    idle: "idle",
+    chase: "chase",
+    attack: "attack",
+  },
+};
+
 export const spriteSheetData = {
   purpleKnight: {
     name: "Purple Knight",

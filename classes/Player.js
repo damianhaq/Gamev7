@@ -3,14 +3,14 @@ import { gameData, keys } from "../gameData.js";
 import { Character } from "./Character.js";
 
 export class Player extends Character {
-  constructor(x, y, radius, spriteSheetData, weaponData) {
+  constructor(x, y, radius, spriteSheetData, weaponData, group) {
     super();
     this.x = x;
     this.y = y;
     this.radius = radius;
     this.spriteSheetData = spriteSheetData;
     this.weaponData = weaponData;
-    // console.log(this.weaponData);
+    this.group = group;
 
     this.weapon.rotationPoint.x = this.weaponData.sprite.w / 2;
     this.weapon.rotationPoint.y = this.weaponData.sprite.h;
@@ -43,7 +43,7 @@ export class Player extends Character {
         // console.log("attack");
       }
 
-      this.attack(this.weapon.rotationAngle);
+      this.attack();
     }
   }
 

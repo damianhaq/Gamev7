@@ -2,7 +2,7 @@ import { Enemy } from "./classes/Enemy.js";
 import { Item } from "./classes/Item.js";
 import { Player } from "./classes/Player.js";
 import { camera, controls, debug } from "./functions.js";
-import { gameData, spriteSheetData, weapons } from "./gameData.js";
+import { gameData, spriteSheetData, variables, weapons } from "./gameData.js";
 
 const canvas = document.querySelector("#canvas");
 canvas.width = 1000;
@@ -20,16 +20,31 @@ spriteSheet.onload = () => {
   requestAnimationFrame(animate);
 };
 
-const player = new Player(
+export const player = new Player(
   canvas.width / 2 / gameData.scale,
   canvas.height / 2 / gameData.scale,
   8,
   spriteSheetData.purpleKnight,
-  weapons.silverSword
+  weapons.silverSword,
+  variables.characterGroups.ally
 );
 controls();
-const enemy = new Enemy(0, 0, 8, spriteSheetData.skeleton, weapons.heavyMace);
-const enemy2 = new Enemy(100, 100, 8, spriteSheetData.orcInMask, weapons.spear);
+const enemy = new Enemy(
+  0,
+  0,
+  8,
+  spriteSheetData.skeleton,
+  weapons.heavyMace,
+  variables.characterGroups.enemy
+);
+const enemy2 = new Enemy(
+  100,
+  100,
+  8,
+  spriteSheetData.orcInMask,
+  weapons.spear,
+  variables.characterGroups.enemy
+);
 const items = [];
 items.push(new Item(50, 50, spriteSheetData.items.weapons.silverSword, false, 0, "0"));
 
@@ -55,9 +70,9 @@ function animate(currentTime) {
 
   camera(player.x, player.y);
   if (counter % 100 === 0) {
-    debug(
-      `deltaTime:${deltaTime}   Player: x:${player.x} y:${player.y}  Camera: x:${gameData.camera.x} y:${gameData.camera.y}`
-    );
+    // debug(
+    //   `deltaTime:${deltaTime}   Player: x:${player.x} y:${player.y}  Camera: x:${gameData.camera.x} y:${gameData.camera.y}`
+    // );
   }
 
   requestAnimationFrame(animate);
