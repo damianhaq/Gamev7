@@ -3,11 +3,16 @@ html,
 p {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: auto;
 }
 body {
   background-color: #0d0d0f;
   font-family: sans-serif;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+body::-webkit-scrollbar {
+  display: none;
 }
 
 canvas {
@@ -24,9 +29,12 @@ canvas {
 .container {
   max-width: 1920px;
   margin: 0 auto;
+  /* height: 100vh; */
 }
 .patchnotes {
   color: white;
+  overflow: auto;
+  /* height: 100%; */
 }
 h1 {
   color: #cacadf;

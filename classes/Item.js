@@ -1,6 +1,4 @@
-import { c, spriteSheet } from "../app.js";
 import { drawSprite } from "../functions.js";
-import { gameData } from "../gameData.js";
 
 export class Item {
   constructor(x, y, spriteSheetData, isFlipX, angle, id) {
