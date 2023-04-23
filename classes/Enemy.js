@@ -27,7 +27,7 @@ export class Enemy extends Character {
   }
 
   toUpdate(deltaTime) {
-    // this.text = `${this.animAttack.isAttacking}`;
+    this.text = `${this.task.current}`;
 
     this.taskManager(deltaTime);
     this.animManager();

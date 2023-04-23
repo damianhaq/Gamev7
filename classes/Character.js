@@ -58,7 +58,7 @@ export class Character {
     c.save();
     c.fillStyle = "white";
     // c.font = "16px sans";
-    c.fillText(this.text, this.x + gameData.camera.x, this.y + gameData.camera.y);
+    c.fillText(this.text, this.x + gameData.camera.x, this.y + gameData.camera.y - 10);
     c.restore();
   }
 
