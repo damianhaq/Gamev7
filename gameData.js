@@ -136,3 +136,8 @@ export const weapons = {
     attackSpeed: 3,
   },
 };
+
+export const map = {
+  loadComplete: false,
+  data: null,
+};

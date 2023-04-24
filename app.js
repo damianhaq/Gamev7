@@ -1,8 +1,8 @@
 import { Enemy } from "./classes/Enemy.js";
 import { Item } from "./classes/Item.js";
 import { Player } from "./classes/Player.js";
-import { camera, controls, debug } from "./functions.js";
-import { gameData, spriteSheetData, variables, weapons } from "./gameData.js";
+import { camera, controls, debug, drawMap } from "./functions.js";
+import { gameData, map, spriteSheetData, variables, weapons } from "./gameData.js";
 
 const canvas = document.querySelector("#canvas");
 canvas.width = 1000;
@@ -13,6 +13,15 @@ c.scale(gameData.scale, gameData.scale);
 c.imageSmoothingEnabled = false;
 
 // ---- PRELOAD ----
+fetch("./assets/map1.json")
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    console.log(data);
+    map.data = data;
+    map.loadComplete = true;
+  });
 
 export const spriteSheet = new Image();
 spriteSheet.src = "./assets/BigSpritev7.png";
@@ -63,6 +72,10 @@ function animate(currentTime) {
   c.fillRect(0, 0, canvas.clientWidth, canvas.height);
   // c.drawImage(spriteSheet, 0 + gameData.camera.x, 0 + gameData.camera.y);
 
+  if (map.loadComplete) {
+    drawMap();
+  }
+
   enemy.update(deltaTime);
   enemy2.update(deltaTime);
   player.update(deltaTime);
@@ -70,9 +83,9 @@ function animate(currentTime) {
 
   camera(player.x, player.y);
   if (counter % 100 === 0) {
-    // debug(
-    //   `deltaTime:${deltaTime}   Player: x:${player.x} y:${player.y}  Camera: x:${gameData.camera.x} y:${gameData.camera.y}`
-    // );
+    debug(
+      `deltaTime:${deltaTime}   Player: x:${player.x} y:${player.y}  Camera: x:${gameData.camera.x} y:${gameData.camera.y}`
+    );
   }
 
   requestAnimationFrame(animate);

@@ -1,5 +1,5 @@
 import { c, debugP, spriteSheet } from "./app.js";
-import { gameData, keys } from "./gameData.js";
+import { gameData, keys, map } from "./gameData.js";
 
 export function camera(x, y) {
   const center = { x: canvas.width / 2 / gameData.scale, y: canvas.height / 2 / gameData.scale };
@@ -131,4 +131,50 @@ export function findNearestEnemy(player) {
     }
   }
   return nearestEnemy;
+}
+
+export function drawMap() {
+  map.data.layers.forEach((layer) => {
+    layer.data;
+
+    let counter = 0;
+    for (let i = 0; i < layer.height; i++) {
+      for (let j = 0; j < layer.width; j++) {
+        if (layer.data[counter] !== 0) {
+          drawOneTile(j * 16, i * 16, layer.data[counter]);
+
+          // c.save();
+          // c.fillStyle = "white";
+          // c.font = "6px sans";
+          // c.fillText(`${counter}`, j * 16 + gameData.camera.x, i * 16 + gameData.camera.y);
+          // c.restore();
+        }
+        counter++;
+      }
+    }
+  });
+}
+
+function drawOneTile(x, y, id) {
+  const pos = getTilePosPxFromId(id);
+
+  c.drawImage(
+    spriteSheet,
+    pos.x,
+    pos.y,
+    16,
+    16,
+    x + gameData.camera.x,
+    y + gameData.camera.y,
+    16,
+    16
+  );
+}
+
+function getTilePosPxFromId(id) {
+  id--;
+  const row = Math.floor(id / 33); // numer wiersza
+  const column = id % 33; // numer kolumny
+
+  return { x: column * 16, y: row * 16 };
 }
