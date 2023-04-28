@@ -18,7 +18,7 @@
         <p style="color: white" id="debug"></p>
       </div>
       <h1>Aktualizacje</h1>
-      <div class="patchnotes">
+      <div class="patchnotes" id="patchnotes">
         <div class="note">
           <div class="titleBar">
             <p>Start</p>
@@ -115,6 +115,23 @@
                 Rysowanie Bloków. Jeszcze bez kolizji i kolejności renderowania warstw ponieważ
                 niektóre bloki muszą być nad postacią / zasłaniać ją.
               </li>
+              <!-- <li>Wrogowie mają teraz proste ai. Atakują, gonią, stoją.</li> -->
+            </ul>
+          </div>
+        </div>
+        <div class="note">
+          <div class="titleBar">
+            <p>Silnik gry</p>
+            <p>28.04.2024</p>
+          </div>
+          <div class="content">
+            <ul>
+              <li>
+                Kolizja nie jest obliczana na podstawie bloków a na podstawie osobnych obiektów
+                zrobionych w Tiled, dzięki temu jest ich mniej i nie trzeba robić żadnej
+                optymalizacji
+              </li>
+              <li>Postacie nie są już kołem a prostokątem.</li>
               <!-- <li>Wrogowie mają teraz proste ai. Atakują, gonią, stoją.</li> -->
             </ul>
           </div>

@@ -34,7 +34,9 @@ canvas {
 .patchnotes {
   color: white;
   overflow: auto;
-  /* height: 100%; */
+  height: 350px;
+  /* display: flex;
+  flex-direction: column-reverse; */
 }
 h1 {
   color: #cacadf;
