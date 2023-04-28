@@ -1,12 +1,19 @@
 import { c, spriteSheet } from "../app.js";
-import { calculateDirection, drawSprite } from "../functions.js";
-import { gameData, keys } from "../gameData.js";
+import {
+  calculateDirection,
+  calculateEndpoint,
+  checkCollision2Rect,
+  debug,
+  drawCircle,
+  drawSprite,
+} from "../functions.js";
+import { gameData, keys, map } from "../gameData.js";
 
 export class Character {
   constructor() {
     this.x = 0;
     this.y = 0;
-    this.radius = 0;
+    // this.radius = 0;
     this.spriteSheetData = null;
     this.movementSpeed = 1;
 
@@ -115,6 +122,19 @@ export class Character {
       this.weapon.rotationAngle,
       false
     );
+
+    // drawCircle(this.weapon.position.x, this.weapon.position.y, 3);
+
+    // const endP = calculateEndpoint(
+    //   { x: this.weapon.position.x, y: this.weapon.position.y },
+    //   this.weaponData.sprite.h + 10,
+    //   this.weapon.rotationAngle - 90
+    // );
+
+    // drawCircle(endP.x, endP.y, 3);
+    // debug(
+    //   `weapon x:${this.weapon.position.x} y:${this.weapon.position.y + this.weaponData.sprite.h}`
+    // );
   }
 
   attack() {
@@ -163,8 +183,54 @@ export class Character {
 
     if (gameData.showHitBox) {
       c.beginPath();
-      c.arc(this.x + gameData.camera.x, this.y + gameData.camera.y, this.radius, 0, 2 * Math.PI);
+      // c.arc(this.x + gameData.camera.x, this.y + gameData.camera.y, this.radius, 0, 2 * Math.PI);
+      c.rect(
+        this.x - this.spriteSheetData.idle.w / 2 + gameData.camera.x,
+        this.y - this.spriteSheetData.idle.h / 2 + gameData.camera.y,
+        this.spriteSheetData.idle.w,
+        this.spriteSheetData.idle.h
+      );
       c.stroke();
     }
+  }
+
+  canMoveCheck(dir) {
+    let x = true;
+    let y = true;
+    if (map.loadComplete) {
+      map.data.layers.forEach((layer) => {
+        if (layer.type === "objectgroup") {
+          layer.objects.forEach((obj) => {
+            // if object is on right side
+            const collide = checkCollision2Rect(
+              {
+                x: this.x - this.spriteSheetData.idle.w / 2,
+                y: this.y - this.spriteSheetData.idle.h / 2,
+                width: this.spriteSheetData.idle.w,
+                height: this.spriteSheetData.idle.h,
+              },
+              { x: obj.x, y: obj.y, width: obj.width, height: obj.height }
+            );
+
+            if (collide !== false)
+              if (collide === "top" && dir.y > 0) {
+                // console.log(obj);
+
+                y = false;
+              }
+            if (collide === "bottom" && dir.y < 0) {
+              y = false;
+            }
+            if (collide === "left" && dir.x > 0) {
+              x = false;
+            }
+            if (collide === "right" && dir.x < 0) {
+              x = false;
+            }
+          });
+        }
+      });
+    }
+    return { x, y };
   }
 }

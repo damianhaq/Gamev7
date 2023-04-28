@@ -1,7 +1,7 @@
 import { Enemy } from "./classes/Enemy.js";
 import { Item } from "./classes/Item.js";
 import { Player } from "./classes/Player.js";
-import { camera, controls, debug, drawMap } from "./functions.js";
+import { camera, controls, debug, drawMap, scrollToBottom } from "./functions.js";
 import { gameData, map, spriteSheetData, variables, weapons } from "./gameData.js";
 
 const canvas = document.querySelector("#canvas");
@@ -11,6 +11,10 @@ export const debugP = document.querySelector("#debug");
 export const c = canvas.getContext("2d");
 c.scale(gameData.scale, gameData.scale);
 c.imageSmoothingEnabled = false;
+
+const patchnotes = document.querySelector("#patchnotes");
+
+scrollToBottom(patchnotes);
 
 // ---- PRELOAD ----
 fetch("./assets/map1.json")
@@ -30,9 +34,8 @@ spriteSheet.onload = () => {
 };
 
 export const player = new Player(
-  canvas.width / 2 / gameData.scale,
-  canvas.height / 2 / gameData.scale,
-  8,
+  100,
+  300,
   spriteSheetData.purpleKnight,
   weapons.silverSword,
   variables.characterGroups.ally
@@ -41,7 +44,6 @@ controls();
 const enemy = new Enemy(
   0,
   0,
-  8,
   spriteSheetData.skeleton,
   weapons.heavyMace,
   variables.characterGroups.enemy
@@ -49,7 +51,6 @@ const enemy = new Enemy(
 const enemy2 = new Enemy(
   100,
   100,
-  8,
   spriteSheetData.orcInMask,
   weapons.spear,
   variables.characterGroups.enemy
@@ -76,17 +77,18 @@ function animate(currentTime) {
     drawMap();
   }
 
-  enemy.update(deltaTime);
+  // enemy.update(deltaTime);
   enemy2.update(deltaTime);
   player.update(deltaTime);
   items.forEach((item) => item.update());
 
   camera(player.x, player.y);
-  if (counter % 100 === 0) {
-    debug(
-      `deltaTime:${deltaTime}   Player: x:${player.x} y:${player.y}  Camera: x:${gameData.camera.x} y:${gameData.camera.y}`
-    );
-  }
+
+  // if (counter % 100 === 0) {
+  // debug(
+  //   `deltaTime:${deltaTime}   Player: x:${player.x} y:${player.y}  Camera: x:${gameData.camera.x} y:${gameData.camera.y}`
+  // );
+  // }
 
   requestAnimationFrame(animate);
 }

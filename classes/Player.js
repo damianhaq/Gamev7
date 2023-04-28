@@ -3,11 +3,11 @@ import { gameData, keys } from "../gameData.js";
 import { Character } from "./Character.js";
 
 export class Player extends Character {
-  constructor(x, y, radius, spriteSheetData, weaponData, group) {
+  constructor(x, y, spriteSheetData, weaponData, group) {
     super();
     this.x = x;
     this.y = y;
-    this.radius = radius;
+    // this.radius = radius;
     this.spriteSheetData = spriteSheetData;
     this.weaponData = weaponData;
     this.group = group;
@@ -63,25 +63,33 @@ export class Player extends Character {
     }
 
     if (keys.a && keys.w) {
-      this.x -= diagonalSpeed;
-      this.y -= diagonalSpeed;
+      const canMove = this.canMoveCheck({ x: -diagonalSpeed, y: -diagonalSpeed });
+      if (canMove.x) this.x -= diagonalSpeed;
+      if (canMove.y) this.y -= diagonalSpeed;
     } else if (keys.a && keys.s) {
-      this.x -= diagonalSpeed;
-      this.y += diagonalSpeed;
+      const canMove = this.canMoveCheck({ x: -diagonalSpeed, y: diagonalSpeed });
+      if (canMove.x) this.x -= diagonalSpeed;
+      if (canMove.y) this.y += diagonalSpeed;
     } else if (keys.d && keys.w) {
-      this.x += diagonalSpeed;
-      this.y -= diagonalSpeed;
+      const canMove = this.canMoveCheck({ x: diagonalSpeed, y: -diagonalSpeed });
+      if (canMove.x) this.x += diagonalSpeed;
+      if (canMove.y) this.y -= diagonalSpeed;
     } else if (keys.d && keys.s) {
-      this.x += diagonalSpeed;
-      this.y += diagonalSpeed;
+      const canMove = this.canMoveCheck({ x: diagonalSpeed, y: diagonalSpeed });
+      if (canMove.x) this.x += diagonalSpeed;
+      if (canMove.y) this.y += diagonalSpeed;
     } else if (keys.a) {
-      this.x -= this.movementSpeed;
+      const canMove = this.canMoveCheck({ x: -this.movementSpeed, y: 0 });
+      if (canMove.x) this.x -= this.movementSpeed;
     } else if (keys.d) {
-      this.x += this.movementSpeed;
+      const canMove = this.canMoveCheck({ x: this.movementSpeed, y: 0 });
+      if (canMove.x) this.x += this.movementSpeed;
     } else if (keys.w) {
-      this.y -= this.movementSpeed;
+      const canMove = this.canMoveCheck({ x: 0, y: -this.movementSpeed });
+      if (canMove.y) this.y -= this.movementSpeed;
     } else if (keys.s) {
-      this.y += this.movementSpeed;
+      const canMove = this.canMoveCheck({ x: 0, y: this.movementSpeed });
+      if (canMove.y) this.y += this.movementSpeed;
     }
   }
 }

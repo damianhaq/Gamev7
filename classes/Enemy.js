@@ -4,11 +4,11 @@ import { gameData, keys, variables } from "../gameData.js";
 import { Character } from "./Character.js";
 
 export class Enemy extends Character {
-  constructor(x, y, radius, spriteSheetData, weaponData, group) {
+  constructor(x, y, spriteSheetData, weaponData, group) {
     super();
     this.x = x;
     this.y = y;
-    this.radius = radius;
+    // this.radius = radius;
     this.spriteSheetData = spriteSheetData;
     this.weaponData = weaponData;
     this.group = group;
@@ -27,7 +27,7 @@ export class Enemy extends Character {
   }
 
   toUpdate(deltaTime) {
-    this.text = `${this.task.current}`;
+    // this.text = `${this.task.current}`;
 
     this.taskManager(deltaTime);
     this.animManager();
@@ -46,7 +46,14 @@ export class Enemy extends Character {
   }
 
   taskManager(deltaTime) {
-    const dist = calculateDistance(this.x, this.y, this.radius, player.x, player.y, player.radius);
+    const dist = calculateDistance(
+      this.x,
+      this.y,
+      this.spriteSheetData.idle.w / 2,
+      player.x,
+      player.y,
+      player.spriteSheetData.idle.w / 2
+    );
 
     if (dist <= 0) {
       this.task.current = variables.tasks.attack;
@@ -108,8 +115,14 @@ export class Enemy extends Character {
   chase() {
     if (this.task.current === variables.tasks.chase) {
       const dir = calculateDirection(this.x, this.y, player.x, player.y);
-      this.x += dir.x * this.movementSpeed;
-      this.y += dir.y * this.movementSpeed;
+      // console.log(dir);
+
+      const canMove = this.canMoveCheck(dir);
+      // console.log(canMove);
+      // this.text = `x:${canMove.x} y:${canMove.y}`;
+
+      if (canMove.x) this.x += dir.x * this.movementSpeed;
+      if (canMove.y) this.y += dir.y * this.movementSpeed;
 
       if (dir.x < 0) {
         if (this.anim.xAxisFlip === false) this.anim.xAxisFlip = true;
