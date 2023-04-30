@@ -19,7 +19,7 @@ export class Player extends Character {
   toUpdate(deltaTime) {
     this.moving(deltaTime);
 
-    if (keys.mouse.click && this.animAttack.currentDuration === 0) {
+    if (!keys.mouse.onGUI && keys.mouse.click && this.animAttack.currentDuration === 0) {
       // once per attack
       this.animAttack.isAttacking = true;
 

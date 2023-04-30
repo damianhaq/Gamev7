@@ -1,11 +1,12 @@
 import { Enemy } from "./classes/Enemy.js";
+import { Button, Gui, Text, Window } from "./classes/Gui.js";
 import { Item } from "./classes/Item.js";
 import { Player } from "./classes/Player.js";
 import { camera, controls, debug, drawMap, scrollToBottom } from "./functions.js";
 import { gameData, map, spriteSheetData, variables, weapons } from "./gameData.js";
 
 const canvas = document.querySelector("#canvas");
-canvas.width = 1000;
+canvas.width = 1300;
 canvas.height = 800;
 export const debugP = document.querySelector("#debug");
 export const c = canvas.getContext("2d");
@@ -17,12 +18,13 @@ const patchnotes = document.querySelector("#patchnotes");
 scrollToBottom(patchnotes);
 
 // ---- PRELOAD ----
+
 fetch("./assets/map1.json")
   .then((response) => {
     return response.json();
   })
   .then((data) => {
-    console.log(data);
+    // console.log(data);
     map.data = data;
     map.loadComplete = true;
   });
@@ -55,6 +57,20 @@ const enemy2 = new Enemy(
   weapons.spear,
   variables.characterGroups.enemy
 );
+
+export const guis = [];
+const window = new Window(20, 20, 5, 5);
+
+const text2 = new Text(28, 17, "Window");
+
+const button = new Button(15, 57, 3, () => (player.x += 10));
+
+const text = new Text(5, 11, "Move x +10");
+
+guis.push(window);
+window.addChilds([button, text2]);
+button.addChilds([text]);
+
 const items = [];
 items.push(new Item(50, 50, spriteSheetData.items.weapons.silverSword, false, 0, "0"));
 
@@ -83,6 +99,10 @@ function animate(currentTime) {
   items.forEach((item) => item.update());
 
   camera(player.x, player.y);
+
+  guis.forEach((el) => el.update());
+
+  // button.update();
 
   // if (counter % 100 === 0) {
   // debug(
