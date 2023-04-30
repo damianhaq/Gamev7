@@ -1,4 +1,4 @@
-import { c, debugP, spriteSheet } from "./app.js";
+import { c, debugP, guis, spriteSheet } from "./app.js";
 import { gameData, keys, map } from "./gameData.js";
 
 export function camera(x, y) {
@@ -38,6 +38,12 @@ export function controls() {
     keys.mouse.click = true;
     keys.mouse.x = ev.offsetX / gameData.scale;
     keys.mouse.y = ev.offsetY / gameData.scale;
+    if (ev.detail > 1) {
+      ev.preventDefault();
+      // of course, you still do not know what you prevent here...
+      // You could also check event.ctrlKey/event.shiftKey/event.altKey
+      // to not prevent something useful.
+    }
   });
 
   document.addEventListener("mouseup", (ev) => {
@@ -47,6 +53,23 @@ export function controls() {
   document.addEventListener("mousemove", (ev) => {
     keys.mouse.x = ev.offsetX / gameData.scale;
     keys.mouse.y = ev.offsetY / gameData.scale;
+
+    mouseIsOnGuiCheck(ev.offsetX / gameData.scale, ev.offsetY / gameData.scale);
+  });
+}
+
+function mouseIsOnGuiCheck(mouseX, mouseY) {
+  guis.forEach((el) => {
+    if (
+      mouseX > el.x &&
+      mouseX < el.x + el.cellsW * 16 &&
+      mouseY > el.y &&
+      mouseY < el.y + el.cellsH * 16
+    ) {
+      if (keys.mouse.onGUI === false) keys.mouse.onGUI = true;
+    } else {
+      if (keys.mouse.onGUI === true) keys.mouse.onGUI = false;
+    }
   });
 }
 
