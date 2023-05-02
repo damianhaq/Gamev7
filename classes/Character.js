@@ -31,7 +31,7 @@ export class Character {
     this.animAttack = {
       isSwingLeft: false,
       isAttacking: false,
-      duration: 500,
+      duration: 400,
       currentDuration: 0,
     };
 
@@ -39,7 +39,7 @@ export class Character {
     this.weapon = {
       xAxisFlip: true,
       rotationAngle: 4,
-      angleChangeSpeed: 2.5, // its attack speed
+      angleChangeSpeed: 4, // its attack speed
       rotationPoint: {
         x: false,
         y: false,

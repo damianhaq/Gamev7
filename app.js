@@ -2,7 +2,7 @@ import { Enemy } from "./classes/Enemy.js";
 import { Button, Gui, Text, Window } from "./classes/Gui.js";
 import { Item } from "./classes/Item.js";
 import { Player } from "./classes/Player.js";
-import { camera, controls, debug, drawMap, scrollToBottom } from "./functions.js";
+import { camera, controls, debug, drawMap, loadGUI, scrollToBottom } from "./functions.js";
 import { gameData, map, spriteSheetData, variables, weapons } from "./gameData.js";
 
 const canvas = document.querySelector("#canvas");
@@ -59,17 +59,7 @@ const enemy2 = new Enemy(
 );
 
 export const guis = [];
-const window = new Window(20, 20, 5, 5);
-
-const text2 = new Text(28, 17, "Window");
-
-const button = new Button(15, 57, 3, () => (player.x += 10));
-
-const text = new Text(5, 11, "Move x +10");
-
-guis.push(window);
-window.addChilds([button, text2]);
-button.addChilds([text]);
+loadGUI();
 
 const items = [];
 items.push(new Item(50, 50, spriteSheetData.items.weapons.silverSword, false, 0, "0"));

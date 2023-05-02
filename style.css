@@ -13,12 +13,12 @@ p {
 body {
   background-color: #0d0d0f;
   font-family: sans-serif;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  /* -ms-overflow-style: none;  IE and Edge 
+  scrollbar-width: none; Firefox */
 }
-body::-webkit-scrollbar {
+/* body::-webkit-scrollbar {
   display: none;
-}
+} */
 
 canvas {
 }
@@ -60,9 +60,42 @@ h1 {
   background-color: #2e2e35;
 }
 ul {
+  list-style-position: inside;
   margin: 0;
   padding-top: 5px;
+  margin-left: 5px;
 }
 li {
+  position: relative;
+  display: flex;
   padding: 5px;
+  border-bottom: 1px solid #595967;
+  /* border-bottom: 1px solid #33acff; */
+}
+li:nth-child(odd) {
+  background-color: #33333b;
+}
+li:hover {
+  /* background-color: #33333b; */
+}
+
+.bugFix::before,
+.yt::before {
+  /* margin-left: auto; */
+  font-size: 0.7rem;
+
+  color: aqua;
+  position: absolute;
+  left: -52px;
+  top: 7px;
+}
+
+.bugFix::before {
+  content: "#BugFix";
+}
+.yt::before {
+  content: "#YouTube";
+}
+a {
+  color: #33acff;
 }
