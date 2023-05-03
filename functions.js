@@ -1,5 +1,6 @@
-import { c, debugP, guis, spriteSheet } from "./app.js";
-import { gameData, keys, map } from "./gameData.js";
+import { c, debugP, guis, player, spriteSheet } from "./app.js";
+import { Window, Text, Button, Icon } from "./classes/Gui.js";
+import { gameData, keys, map, spriteSheetData } from "./gameData.js";
 
 export function camera(x, y) {
   const center = { x: canvas.width / 2 / gameData.scale, y: canvas.height / 2 / gameData.scale };
@@ -278,4 +279,60 @@ export function checkCollision2Rect(rect1, rect2) {
     }
   }
   return collision;
+}
+
+export function loadGUI() {
+  // top window
+  const topWindow = new Window(1, 0, 27, 2, spriteSheetData.gui.brownWindow, false);
+
+  // bottom window
+  const bottomWindow = new Window(1, 240, 27, 3, spriteSheetData.gui.blueWindow, false);
+  const devButton = new Button(7, 7, 3, () => {
+    if (gameData.gui.isDevWindowOpen) {
+      gameData.gui.isDevWindowOpen = false;
+      const index = guis.findIndex((el) => el.id === "devWindow");
+      if (index !== -1) guis.splice(index, 1);
+    } else {
+      gameData.gui.isDevWindowOpen = true;
+      guis.push(devWindow);
+    }
+  });
+  const devText = new Text("center", "center", "Dev");
+
+  // dev window
+  const devWindow = new Window(320, 80, 7, 5, spriteSheetData.gui.blueWindow, true);
+  devWindow.id = "devWindow";
+  const title = new Text("center", 15, "Dev");
+
+  // hitbox -------------------
+
+  const showHitBoxText = new Text(10, 30, "Show hitbox");
+  const iconOk = new Icon("center", "center", spriteSheetData.gui.icon.ok);
+  const iconNot = new Icon("center", "center", spriteSheetData.gui.icon.x);
+  const hitboxCheckbox = new Button(55, 19, 1, function () {
+    gameData.showHitBox = !gameData.showHitBox;
+
+    if (gameData.showHitBox) {
+      this.addChilds([iconOk]);
+    } else {
+      this.addChilds([iconNot]);
+    }
+  });
+
+  // initial ------------
+  if (gameData.showHitBox) {
+    hitboxCheckbox.addChilds([iconOk]);
+  } else {
+    hitboxCheckbox.addChilds([iconNot]);
+  }
+
+  if (gameData.gui.isDevWindowOpen) {
+    guis.push(devWindow);
+  }
+
+  guis.push(topWindow, bottomWindow);
+  devWindow.addChilds([title, showHitBoxText, hitboxCheckbox]);
+  bottomWindow.addChilds([devButton]);
+  devButton.addChilds([devText]);
+  console.log(guis);
 }

@@ -6,6 +6,9 @@ export const gameData = {
     x: 0,
     y: 0,
   },
+  gui: {
+    isDevWindowOpen: false,
+  },
 };
 
 export const keys = {
@@ -116,10 +119,11 @@ export const spriteSheetData = {
   gui: {
     blueWindow: {
       corners: {
-        leftTop: { x: 144, y: 1200, w: 16, h: 16 },
+        leftTop: { x: 144, y: 1472, w: 16, h: 16 },
         topRight: { x: 176, y: 1200, w: 16, h: 16 },
         leftBottom: { x: 144, y: 1232, w: 16, h: 16 },
         rightBottom: { x: 176, y: 1232, w: 16, h: 16 },
+        leftTopMovable: { x: 144, y: 1200, w: 16, h: 16 },
       },
       edges: {
         top: { x: 160, y: 1200, w: 16, h: 16 },
@@ -128,6 +132,22 @@ export const spriteSheetData = {
         bottom: { x: 160, y: 1232, w: 16, h: 16 },
       },
       field: { x: 160, y: 1216, w: 16, h: 16 },
+    },
+    brownWindow: {
+      corners: {
+        leftTop: { x: 144, y: 1264, w: 16, h: 16 },
+        topRight: { x: 176, y: 1264, w: 16, h: 16 },
+        leftBottom: { x: 144, y: 1280, w: 16, h: 16 },
+        rightBottom: { x: 176, y: 1280, w: 16, h: 16 },
+        leftTopMovable: { x: 144, y: 1264, w: 16, h: 16 },
+      },
+      edges: {
+        top: { x: 160, y: 1264, w: 16, h: 16 },
+        left: { x: 144, y: 1272, w: 16, h: 16 },
+        right: { x: 176, y: 1272, w: 16, h: 16 },
+        bottom: { x: 160, y: 1280, w: 16, h: 16 },
+      },
+      field: { x: 160, y: 1272, w: 16, h: 16 },
     },
     button: {
       leftEdge: {
@@ -247,6 +267,18 @@ export const spriteSheetData = {
       ",": { x: 315, y: 1383, w: 1, h: 6 },
       l: { x: 318, y: 1383, w: 1, h: 6 },
       i: { x: 321, y: 1383, w: 1, h: 6 },
+    },
+    icon: {
+      leftArrow: { x: 277, y: 1204, w: 5, h: 6 },
+      rightArrow: { x: 294, y: 1204, w: 5, h: 6 },
+      x: { x: 197, y: 1236, w: 6, h: 5 },
+      ok: { x: 213, y: 1237, w: 6, h: 5 },
+      message: { x: 228, y: 1236, w: 8, h: 6 },
+      lock: { x: 244, y: 1235, w: 8, h: 10 },
+      heart: { x: 260, y: 1236, w: 8, h: 6 },
+      home: { x: 196, y: 1251, w: 8, h: 7 },
+      "?": { x: 214, y: 1251, w: 4, h: 7 },
+      pause: { x: 245, y: 1252, w: 6, h: 8 },
     },
   },
 };
