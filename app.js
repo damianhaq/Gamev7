@@ -92,8 +92,6 @@ function animate(currentTime) {
 
   guis.forEach((el) => el.update());
 
-  // button.update();
-
   // if (counter % 100 === 0) {
   // debug(
   //   `deltaTime:${deltaTime}   Player: x:${player.x} y:${player.y}  Camera: x:${gameData.camera.x} y:${gameData.camera.y}`

@@ -1,6 +1,6 @@
 import { c, debugP, guis, player, spriteSheet } from "./app.js";
-import { Window, Text, Button } from "./classes/Gui.js";
-import { gameData, keys, map } from "./gameData.js";
+import { Window, Text, Button, Icon } from "./classes/Gui.js";
+import { gameData, keys, map, spriteSheetData } from "./gameData.js";
 
 export function camera(x, y) {
   const center = { x: canvas.width / 2 / gameData.scale, y: canvas.height / 2 / gameData.scale };
@@ -285,15 +285,34 @@ export function loadGUI() {
   const window = new Window(20, 20, 7, 5);
   const title = new Text("center", 15, "Dev");
 
-  const showHitBoxText = new Text(10, 30, "Show hitbox");
-  const hitboxCheckbox = new Button(55, 19, 1, () => {});
-  // TODO: create new class "icon" and add to button to create checkbox
+  // hitbox -------------------
 
-  const button = new Button("center", 57, 3, () => (player.x += 10));
-  const text = new Text("center", "center", "Move x +10");
+  const showHitBoxText = new Text(10, 30, "Show hitbox");
+  const iconOk = new Icon("center", "center", spriteSheetData.gui.icon.ok);
+  const iconNot = new Icon("center", "center", spriteSheetData.gui.icon.x);
+  const hitboxCheckbox = new Button(55, 19, 1, function () {
+    gameData.showHitBox = !gameData.showHitBox;
+
+    if (gameData.showHitBox) {
+      this.addChilds([iconOk]);
+    } else {
+      this.addChilds([iconNot]);
+    }
+  });
+
+  if (gameData.showHitBox) {
+    hitboxCheckbox.addChilds([iconOk]);
+  } else {
+    hitboxCheckbox.addChilds([iconNot]);
+  }
+
+  // ---------------------------
+
+  // const button = new Button("center", 57, 3, () => {});
+  // const text = new Text("center", "center", "Move x +10");
 
   guis.push(window);
-  window.addChilds([button, title, showHitBoxText, hitboxCheckbox]);
-  button.addChilds([text]);
+  window.addChilds([title, showHitBoxText, hitboxCheckbox]);
+  // button.addChilds([text]);
   console.log(guis);
 }

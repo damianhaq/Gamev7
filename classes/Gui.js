@@ -9,6 +9,7 @@ export class Gui {
     this.h = 0;
     this.childs = [];
     this.parent = { x: 0, y: 0, w: 0, h: 0 };
+    this.id = null;
   }
 
   update() {
@@ -165,7 +166,9 @@ export class Button extends Gui {
     // update child's
     if (this.childs.length > 0) {
       this.childs.forEach((el) => {
-        el.toUpdate({ x: x2 + this.parent.x, y: y2 + this.parent.y, w: this.w, h: this.h });
+        let px = 0; // If button is pressed then everything inside need to be 1 pixel down
+        this.state === "pressed" ? (px = 1) : 0;
+        el.toUpdate({ x: x2 + this.parent.x, y: y2 + this.parent.y + px, w: this.w, h: this.h });
       });
     }
   }
@@ -242,5 +245,43 @@ export class Text extends Gui {
     // c.arc(x2, y2, 5, 0, Math.PI * 2);
     // c.stroke();
     c.restore();
+  }
+}
+
+export class Icon extends Gui {
+  constructor(x, y, spriteSheetData) {
+    super();
+    this.x = x;
+    this.y = y;
+    this.w = spriteSheetData.w;
+    this.h = spriteSheetData.h;
+    this.spriteSheetData = spriteSheetData;
+  }
+
+  toUpdate(parentData) {
+    if (this.parent.x !== parentData.x) this.parent.x = parentData.x;
+    if (this.parent.y !== parentData.y) this.parent.y = parentData.y;
+    if (this.parent.w !== parentData.w) this.parent.w = parentData.w;
+    if (this.parent.h !== parentData.h) this.parent.h = parentData.h;
+
+    let x2, y2;
+    if (this.x === "center") {
+      x2 = this.parent.w / 2 - this.w / 2;
+    } else x2 = this.x;
+    if (this.y === "center") {
+      y2 = this.parent.h / 2 - this.h / 2;
+    } else y2 = this.y;
+
+    c.drawImage(
+      spriteSheet,
+      this.spriteSheetData.x,
+      this.spriteSheetData.y,
+      this.spriteSheetData.w,
+      this.spriteSheetData.h,
+      x2 + parentData.x,
+      y2 + parentData.y,
+      this.spriteSheetData.w,
+      this.spriteSheetData.h
+    );
   }
 }
