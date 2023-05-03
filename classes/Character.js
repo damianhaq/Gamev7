@@ -16,6 +16,7 @@ export class Character {
     // this.radius = 0;
     this.spriteSheetData = null;
     this.movementSpeed = 1;
+    this.hp = null;
 
     this.group = null;
     this.text = null;

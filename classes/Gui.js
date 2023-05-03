@@ -33,7 +33,7 @@ export class Gui {
 }
 
 export class Window extends Gui {
-  constructor(x, y, cellsW, cellsH) {
+  constructor(x, y, cellsW, cellsH, spriteSheetData, isMovable) {
     super();
     this.x = x;
     this.y = y;
@@ -41,6 +41,8 @@ export class Window extends Gui {
     this.h = cellsH * 16;
     this.cellsW = cellsW;
     this.cellsH = cellsH;
+    this.spriteSheetData = spriteSheetData;
+    this.isMovable = isMovable;
 
     this.drag = false;
   }
@@ -48,22 +50,23 @@ export class Window extends Gui {
   toUpdate() {
     for (let i = 0; i < this.cellsH; i++) {
       for (let j = 0; j < this.cellsW; j++) {
-        let cell = spriteSheetData.gui.blueWindow.field;
+        let cell = this.spriteSheetData.field;
 
         // draw edges
-        if (i === 0) cell = spriteSheetData.gui.blueWindow.edges.top;
-        if (i === this.cellsH - 1) cell = spriteSheetData.gui.blueWindow.edges.bottom;
-        if (j === this.cellsW - 1) cell = spriteSheetData.gui.blueWindow.edges.right;
-        if (j === 0) cell = spriteSheetData.gui.blueWindow.edges.left;
+        if (i === 0) cell = this.spriteSheetData.edges.top;
+        if (i === this.cellsH - 1) cell = this.spriteSheetData.edges.bottom;
+        if (j === this.cellsW - 1) cell = this.spriteSheetData.edges.right;
+        if (j === 0) cell = this.spriteSheetData.edges.left;
 
         // draw corners
-        if (i === 0 && j === 0) cell = spriteSheetData.gui.blueWindow.corners.leftTop;
-        if (i === 0 && j === this.cellsW - 1)
-          cell = spriteSheetData.gui.blueWindow.corners.topRight;
-        if (i === this.cellsH - 1 && j === 0)
-          cell = spriteSheetData.gui.blueWindow.corners.leftBottom;
+        if (i === 0 && j === 0)
+          this.isMovable === true
+            ? (cell = this.spriteSheetData.corners.leftTopMovable)
+            : (cell = this.spriteSheetData.corners.leftTop);
+        if (i === 0 && j === this.cellsW - 1) cell = this.spriteSheetData.corners.topRight;
+        if (i === this.cellsH - 1 && j === 0) cell = this.spriteSheetData.corners.leftBottom;
         if (i === this.cellsH - 1 && j === this.cellsW - 1)
-          cell = spriteSheetData.gui.blueWindow.corners.rightBottom;
+          cell = this.spriteSheetData.corners.rightBottom;
 
         c.drawImage(
           spriteSheet,
@@ -86,7 +89,7 @@ export class Window extends Gui {
       });
     }
 
-    this.changePosition();
+    if (this.isMovable) this.changePosition();
   }
 
   changePosition() {

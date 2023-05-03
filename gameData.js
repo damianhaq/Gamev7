@@ -6,6 +6,9 @@ export const gameData = {
     x: 0,
     y: 0,
   },
+  gui: {
+    isDevWindowOpen: false,
+  },
 };
 
 export const keys = {
@@ -116,10 +119,11 @@ export const spriteSheetData = {
   gui: {
     blueWindow: {
       corners: {
-        leftTop: { x: 144, y: 1200, w: 16, h: 16 },
+        leftTop: { x: 144, y: 1472, w: 16, h: 16 },
         topRight: { x: 176, y: 1200, w: 16, h: 16 },
         leftBottom: { x: 144, y: 1232, w: 16, h: 16 },
         rightBottom: { x: 176, y: 1232, w: 16, h: 16 },
+        leftTopMovable: { x: 144, y: 1200, w: 16, h: 16 },
       },
       edges: {
         top: { x: 160, y: 1200, w: 16, h: 16 },
@@ -128,6 +132,22 @@ export const spriteSheetData = {
         bottom: { x: 160, y: 1232, w: 16, h: 16 },
       },
       field: { x: 160, y: 1216, w: 16, h: 16 },
+    },
+    brownWindow: {
+      corners: {
+        leftTop: { x: 144, y: 1264, w: 16, h: 16 },
+        topRight: { x: 176, y: 1264, w: 16, h: 16 },
+        leftBottom: { x: 144, y: 1280, w: 16, h: 16 },
+        rightBottom: { x: 176, y: 1280, w: 16, h: 16 },
+        leftTopMovable: { x: 144, y: 1264, w: 16, h: 16 },
+      },
+      edges: {
+        top: { x: 160, y: 1264, w: 16, h: 16 },
+        left: { x: 144, y: 1272, w: 16, h: 16 },
+        right: { x: 176, y: 1272, w: 16, h: 16 },
+        bottom: { x: 160, y: 1280, w: 16, h: 16 },
+      },
+      field: { x: 160, y: 1272, w: 16, h: 16 },
     },
     button: {
       leftEdge: {
