@@ -1,4 +1,5 @@
 import { c, spriteSheet } from "../app.js";
+import { drawText } from "../functions.js";
 import { gameData, keys, spriteSheetData } from "../gameData.js";
 
 export class Gui {
@@ -102,6 +103,7 @@ export class Window extends Gui {
       keys.mouse.click
     ) {
       this.drag = true;
+      drawText(this.x + 10, this.y, `x: ${this.x.toFixed()} y: ${this.y.toFixed()}`);
     }
 
     if (!keys.mouse.click) this.drag = false;
@@ -286,5 +288,49 @@ export class Icon extends Gui {
       this.spriteSheetData.w,
       this.spriteSheetData.h
     );
+  }
+}
+
+export class Inventory extends Gui {
+  constructor(x, y, cellsW, cellsH, spriteSheetData) {
+    super();
+    this.x = x;
+    this.y = y;
+    this.w = cellsW * 16;
+    this.h = cellsH * 16;
+    this.cellsW = cellsW;
+    this.cellsH = cellsH;
+    this.spriteSheetData = spriteSheetData;
+  }
+
+  toUpdate(parentData) {
+    if (this.parent.x !== parentData.x) this.parent.x = parentData.x;
+    if (this.parent.y !== parentData.y) this.parent.y = parentData.y;
+    if (this.parent.w !== parentData.w) this.parent.w = parentData.w;
+    if (this.parent.h !== parentData.h) this.parent.h = parentData.h;
+
+    let x2, y2;
+    if (this.x === "center") {
+      x2 = this.parent.w / 2 - this.w / 2;
+    } else x2 = this.x;
+    if (this.y === "center") {
+      y2 = this.parent.h / 2 - this.h / 2;
+    } else y2 = this.y;
+
+    for (let i = 0; i < this.cellsH; i++) {
+      for (let j = 0; j < this.cellsW; j++) {
+        c.drawImage(
+          spriteSheet,
+          this.spriteSheetData.x,
+          this.spriteSheetData.y,
+          this.spriteSheetData.w,
+          this.spriteSheetData.h,
+          x2 + 0 * j + j * 16 + parentData.x,
+          y2 + 0 * i + i * 16 + parentData.y,
+          16,
+          16
+        );
+      }
+    }
   }
 }

@@ -1,5 +1,4 @@
 import { Enemy } from "./classes/Enemy.js";
-import { Button, Gui, Text, Window } from "./classes/Gui.js";
 import { Item } from "./classes/Item.js";
 import { Player } from "./classes/Player.js";
 import { camera, controls, debug, drawMap, loadGUI, scrollToBottom } from "./functions.js";
@@ -61,8 +60,8 @@ const enemy2 = new Enemy(
 export const guis = [];
 loadGUI();
 
-const items = [];
-items.push(new Item(50, 50, spriteSheetData.items.weapons.silverSword, false, 0, "0"));
+export const items = [];
+items.push(new Item(200, 300, spriteSheetData.items.weapons.silverSword, false, 0, "0"));
 
 // ---- GAME LOOP ----
 let lastTime = 0;

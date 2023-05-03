@@ -8,7 +8,9 @@ export const gameData = {
   },
   gui: {
     isDevWindowOpen: false,
+    isInventoryWindowOpen: true,
   },
+  playerInventory: [],
 };
 
 export const keys = {
@@ -139,7 +141,7 @@ export const spriteSheetData = {
         topRight: { x: 176, y: 1264, w: 16, h: 16 },
         leftBottom: { x: 144, y: 1280, w: 16, h: 16 },
         rightBottom: { x: 176, y: 1280, w: 16, h: 16 },
-        leftTopMovable: { x: 144, y: 1264, w: 16, h: 16 },
+        leftTopMovable: { x: 144, y: 1504, w: 16, h: 16 },
       },
       edges: {
         top: { x: 160, y: 1264, w: 16, h: 16 },
@@ -280,6 +282,7 @@ export const spriteSheetData = {
       "?": { x: 214, y: 1251, w: 4, h: 7 },
       pause: { x: 245, y: 1252, w: 6, h: 8 },
     },
+    yellowTile: { x: 176, y: 1472, w: 16, h: 16 },
   },
 };
 

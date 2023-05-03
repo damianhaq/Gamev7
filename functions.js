@@ -1,5 +1,5 @@
 import { c, debugP, guis, player, spriteSheet } from "./app.js";
-import { Window, Text, Button, Icon } from "./classes/Gui.js";
+import { Window, Text, Button, Icon, Inventory } from "./classes/Gui.js";
 import { gameData, keys, map, spriteSheetData } from "./gameData.js";
 
 export function camera(x, y) {
@@ -240,10 +240,12 @@ export function drawRect(x, y, w, h) {
   c.stroke();
 }
 export function drawText(x, y, text) {
-  c.beginPath();
+  c.save();
+  c.fillStyle = "#fff";
+  c.font = `8px MinimalPixelv2`;
 
-  c.fillText(text, x + gameData.camera.x, y + gameData.camera.y);
-  c.stroke();
+  c.fillText(text, x, y);
+  c.restore();
 }
 
 export function calculateEndpoint(startPoint, length, angle) {
@@ -299,6 +301,24 @@ export function loadGUI() {
   });
   const devText = new Text("center", "center", "Dev");
 
+  const inventoryButton = new Button(3 * 16 + 7, 7, 4, () => {
+    if (gameData.gui.isInventoryWindowOpen) {
+      gameData.gui.isInventoryWindowOpen = false;
+      const index = guis.findIndex((el) => el.id === "inventoryWindow");
+      if (index !== -1) guis.splice(index, 1);
+    } else {
+      gameData.gui.isInventoryWindowOpen = true;
+      guis.push(inventoryWindow);
+    }
+  });
+  const inventoryText = new Text("center", "center", "Ekwipunek");
+
+  // Inventory
+  const inventoryWindow = new Window(1, 33, 10, 13, spriteSheetData.gui.brownWindow, true);
+  inventoryWindow.id = "inventoryWindow";
+  const inventoryWindowTitle = new Text("center", 18, "Ekwipunek");
+  const inventory = new Inventory("center", 25, 9, 11, spriteSheetData.gui.yellowTile);
+
   // dev window
   const devWindow = new Window(320, 80, 7, 5, spriteSheetData.gui.blueWindow, true);
   devWindow.id = "devWindow";
@@ -329,10 +349,15 @@ export function loadGUI() {
   if (gameData.gui.isDevWindowOpen) {
     guis.push(devWindow);
   }
+  if (gameData.gui.isInventoryWindowOpen) {
+    guis.push(inventoryWindow);
+  }
 
   guis.push(topWindow, bottomWindow);
   devWindow.addChilds([title, showHitBoxText, hitboxCheckbox]);
-  bottomWindow.addChilds([devButton]);
+  inventoryWindow.addChilds([inventory, inventoryWindowTitle]);
+  bottomWindow.addChilds([devButton, inventoryButton]);
   devButton.addChilds([devText]);
+  inventoryButton.addChilds([inventoryText]);
   console.log(guis);
 }
