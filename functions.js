@@ -282,7 +282,26 @@ export function checkCollision2Rect(rect1, rect2) {
 }
 
 export function loadGUI() {
-  const window = new Window(20, 20, 7, 5);
+  // top window
+  const topWindow = new Window(1, 0, 27, 2, spriteSheetData.gui.brownWindow, false);
+
+  // bottom window
+  const bottomWindow = new Window(1, 240, 27, 3, spriteSheetData.gui.blueWindow, false);
+  const devButton = new Button(7, 7, 3, () => {
+    if (gameData.gui.isDevWindowOpen) {
+      gameData.gui.isDevWindowOpen = false;
+      const index = guis.findIndex((el) => el.id === "devWindow");
+      if (index !== -1) guis.splice(index, 1);
+    } else {
+      gameData.gui.isDevWindowOpen = true;
+      guis.push(devWindow);
+    }
+  });
+  const devText = new Text("center", "center", "Dev");
+
+  // dev window
+  const devWindow = new Window(320, 80, 7, 5, spriteSheetData.gui.blueWindow, true);
+  devWindow.id = "devWindow";
   const title = new Text("center", 15, "Dev");
 
   // hitbox -------------------
@@ -300,19 +319,20 @@ export function loadGUI() {
     }
   });
 
+  // initial ------------
   if (gameData.showHitBox) {
     hitboxCheckbox.addChilds([iconOk]);
   } else {
     hitboxCheckbox.addChilds([iconNot]);
   }
 
-  // ---------------------------
+  if (gameData.gui.isDevWindowOpen) {
+    guis.push(devWindow);
+  }
 
-  // const button = new Button("center", 57, 3, () => {});
-  // const text = new Text("center", "center", "Move x +10");
-
-  guis.push(window);
-  window.addChilds([title, showHitBoxText, hitboxCheckbox]);
-  // button.addChilds([text]);
+  guis.push(topWindow, bottomWindow);
+  devWindow.addChilds([title, showHitBoxText, hitboxCheckbox]);
+  bottomWindow.addChilds([devButton]);
+  devButton.addChilds([devText]);
   console.log(guis);
 }
