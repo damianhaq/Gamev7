@@ -61,7 +61,15 @@ export const guis = [];
 loadGUI();
 
 export const items = [];
-items.push(new Item(200, 300, spriteSheetData.items.weapons.silverSword, false, 0, "0"));
+const sword1 = new Item(200, 270, spriteSheetData.items.weapons.silverSword, false, 0, "0");
+const knife = new Item(250, 270, spriteSheetData.items.weapons.knife, false, 0, "knife");
+items.push(sword1, knife);
+
+for (let i = 0; i < 20; i++) {
+  items.push(
+    new Item(200 + 10 * i, 300, spriteSheetData.items.potions.red.big, false, 0, `redPotion${i}`)
+  );
+}
 
 // ---- GAME LOOP ----
 let lastTime = 0;
@@ -72,7 +80,7 @@ function animate(currentTime) {
   counter++;
   deltaTime = currentTime - lastTime;
   lastTime = currentTime;
-  // const fps = Math.round(1000 / deltaTime);
+  const fps = Math.round(1000 / deltaTime);
 
   c.fillStyle = "#2e2e35";
   c.fillRect(0, 0, canvas.clientWidth, canvas.height);
@@ -91,11 +99,15 @@ function animate(currentTime) {
 
   guis.forEach((el) => el.update());
 
-  // if (counter % 100 === 0) {
-  // debug(
-  //   `deltaTime:${deltaTime}   Player: x:${player.x} y:${player.y}  Camera: x:${gameData.camera.x} y:${gameData.camera.y}`
-  // );
-  // }
+  if (counter % 100 === 0) {
+    debug(
+      `deltaTime:${deltaTime.toFixed(1)} FPS:${fps}  Player: x:${player.x.toFixed(
+        1
+      )} y:${player.y.toFixed(1)}  Camera: x:${gameData.camera.x.toFixed(
+        1
+      )} y:${gameData.camera.y.toFixed(1)}`
+    );
+  }
 
   requestAnimationFrame(animate);
 }

@@ -1,5 +1,5 @@
 import { c, spriteSheet } from "../app.js";
-import { drawText } from "../functions.js";
+import { drawSprite, drawText, getItemPosFromIndexInInventory } from "../functions.js";
 import { gameData, keys, spriteSheetData } from "../gameData.js";
 
 export class Gui {
@@ -332,5 +332,27 @@ export class Inventory extends Gui {
         );
       }
     }
+
+    this.drawItems(x2 + parentData.x, y2 + parentData.y, this.cellsW, this.cellsH);
+  }
+
+  drawItems(x2, y2, cellsW, cellsH) {
+    gameData.playerInventory.forEach((item, index) => {
+      const pos = getItemPosFromIndexInInventory(index, x2, y2, cellsW, cellsH);
+      // console.log(x2, y2);
+
+      // drawSprite(item.spriteSheetData, pos.x, pos.y, 0, 0, 0, false);
+      c.drawImage(
+        spriteSheet,
+        item.spriteSheetData.x,
+        item.spriteSheetData.y,
+        item.spriteSheetData.w,
+        item.spriteSheetData.h,
+        pos.x + 8 - item.spriteSheetData.w / 2,
+        pos.y + 8 - item.spriteSheetData.h / 2,
+        item.spriteSheetData.w,
+        item.spriteSheetData.h
+      );
+    });
   }
 }

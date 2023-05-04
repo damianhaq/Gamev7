@@ -11,7 +11,15 @@ export class Item {
   }
 
   update() {
-    drawSprite(this.spriteSheetData, this.x, this.y, 0, 0, 0, false);
+    drawSprite(
+      this.spriteSheetData,
+      this.x,
+      this.y,
+      this.spriteSheetData.w / 2,
+      this.spriteSheetData.h / 2,
+      this.angle,
+      this.isFlipX
+    );
     this.toUpdate();
   }
 

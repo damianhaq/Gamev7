@@ -116,6 +116,18 @@ export const spriteSheetData = {
         w: 6,
         h: 30,
       },
+      knife: {
+        name: "Knife",
+        x: 149,
+        y: 786,
+        w: 6,
+        h: 13,
+      },
+    },
+    potions: {
+      red: {
+        big: { x: 147, y: 996, w: 10, h: 11 },
+      },
     },
   },
   gui: {

@@ -112,6 +112,10 @@ export function drawSprite(spriteSheetData, x, y, originX, originY, angleDeg, is
     c.beginPath();
     c.rect(-originX, -originY, spriteSheetData.w, spriteSheetData.h);
     c.stroke();
+
+    c.beginPath();
+    c.arc(0, 0, 2, 0, Math.PI * 2);
+    c.stroke();
   }
   c.restore();
 }
@@ -190,7 +194,7 @@ export function drawMap() {
         if (obj.point) {
           c.fillStyle = "white";
           // c.font = "16px sans";
-          drawText(obj.x, obj.y - 10, obj.name);
+          drawText(obj.x + gameData.camera.x, obj.y + gameData.camera.y - 10, obj.name);
           drawRect(obj.x, obj.y, 1, 1);
         }
 
@@ -360,4 +364,11 @@ export function loadGUI() {
   devButton.addChilds([devText]);
   inventoryButton.addChilds([inventoryText]);
   console.log(guis);
+}
+
+export function getItemPosFromIndexInInventory(index, inventoryX, inventoryY, tilesW, tilesH) {
+  const row = Math.floor(index / tilesW); // numer wiersza
+  const column = index % tilesW; // numer kolumny
+  // console.log(row, column);
+  return { x: column * 16 + inventoryX, y: row * 16 + inventoryY };
 }

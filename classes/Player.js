@@ -1,4 +1,5 @@
-import { calculateDirection, getAngleBetweenPoints } from "../functions.js";
+import { items } from "../app.js";
+import { calculateDirection, calculateDistance, getAngleBetweenPoints } from "../functions.js";
 import { gameData, keys } from "../gameData.js";
 import { Character } from "./Character.js";
 
@@ -7,10 +8,12 @@ export class Player extends Character {
     super();
     this.x = x;
     this.y = y;
-    // this.radius = radius;
     this.spriteSheetData = spriteSheetData;
     this.weaponData = weaponData;
     this.group = group;
+
+    this.itemGrabRange = 100;
+    this.itemGrabMoveSpeed = 2;
 
     this.weapon.rotationPoint.x = this.weaponData.sprite.w / 2;
     this.weapon.rotationPoint.y = this.weaponData.sprite.h;
@@ -45,6 +48,8 @@ export class Player extends Character {
 
       this.attack();
     }
+
+    this.grabItems();
   }
 
   moving() {
@@ -91,5 +96,23 @@ export class Player extends Character {
       const canMove = this.canMoveCheck({ x: 0, y: this.movementSpeed });
       if (canMove.y) this.y += this.movementSpeed;
     }
+  }
+
+  grabItems() {
+    items.forEach((item, index) => {
+      const dist = calculateDistance(this.x, this.y, 0, item.x, item.y, 0);
+      if (dist < this.itemGrabRange) {
+        const dir = calculateDirection(item.x, item.y, this.x, this.y);
+        item.x += dir.x * this.itemGrabMoveSpeed;
+        item.y += dir.y * this.itemGrabMoveSpeed;
+      }
+      if (dist <= 3) {
+        item.x = 0;
+        item.y = 0;
+        gameData.playerInventory.push(item);
+        items.splice(index, 1);
+        // console.log("Ekwipunek: ", gameData.playerInventory, "Itemki na ziemi:", items);
+      }
+    });
   }
 }
