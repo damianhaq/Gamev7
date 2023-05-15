@@ -1,8 +1,9 @@
 import { Enemy } from "./classes/Enemy.js";
+import { DetailsWindow, Icon } from "./classes/Gui.js";
 import { Item } from "./classes/Item.js";
 import { Player } from "./classes/Player.js";
 import { camera, controls, debug, drawMap, loadGUI, scrollToBottom } from "./functions.js";
-import { gameData, map, spriteSheetData, variables, weapons } from "./gameData.js";
+import { gameData, itemsData, map, spriteSheetData, variables, weapons } from "./gameData.js";
 
 const canvas = document.querySelector("#canvas");
 canvas.width = 1300;
@@ -37,7 +38,7 @@ spriteSheet.onload = () => {
 export const player = new Player(
   100,
   300,
-  spriteSheetData.purpleKnight,
+  spriteSheetData.elfM,
   weapons.silverSword,
   variables.characterGroups.ally
 );
@@ -60,15 +61,18 @@ const enemy2 = new Enemy(
 export const guis = [];
 loadGUI();
 
+// details window
+export const detailsWindow = new DetailsWindow(7, 8);
+
+guis.push(detailsWindow);
+
 export const items = [];
-const sword1 = new Item(200, 270, spriteSheetData.items.weapons.silverSword, false, 0, "0");
-const knife = new Item(250, 270, spriteSheetData.items.weapons.knife, false, 0, "knife");
+const sword1 = new Item(200, 270, false, 0, weapons.silverSword);
+const knife = new Item(250, 270, false, 0, weapons.knife);
 items.push(sword1, knife);
 
 for (let i = 0; i < 20; i++) {
-  items.push(
-    new Item(200 + 10 * i, 300, spriteSheetData.items.potions.red.big, false, 0, `redPotion${i}`)
-  );
+  items.push(new Item(200 + 10 * i, 300, false, 0, itemsData.potions.red.big));
 }
 
 // ---- GAME LOOP ----

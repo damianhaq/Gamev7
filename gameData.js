@@ -59,6 +59,23 @@ export const spriteSheetData = {
       frames: 4,
     },
   },
+  elfM: {
+    name: "Elf",
+    idle: {
+      x: 0,
+      y: 1323,
+      w: 16,
+      h: 21,
+      frames: 4,
+    },
+    run: {
+      x: 64,
+      y: 1323,
+      w: 16,
+      h: 21,
+      frames: 4,
+    },
+  },
   orcInMask: {
     name: "Orc in mask",
     idle: {
@@ -146,6 +163,21 @@ export const spriteSheetData = {
         bottom: { x: 160, y: 1232, w: 16, h: 16 },
       },
       field: { x: 160, y: 1216, w: 16, h: 16 },
+    },
+    detailsWindow: {
+      corners: {
+        leftTop: { x: 352, y: 992, w: 16, h: 16 },
+        topRight: { x: 384, y: 992, w: 16, h: 16 },
+        leftBottom: { x: 352, y: 1040, w: 16, h: 16 },
+        rightBottom: { x: 384, y: 1040, w: 16, h: 16 },
+      },
+      edges: {
+        top: { x: 368, y: 992, w: 16, h: 16 },
+        left: { x: 352, y: 1024, w: 16, h: 16 },
+        right: { x: 384, y: 1024, w: 16, h: 16 },
+        bottom: { x: 368, y: 1040, w: 16, h: 16 },
+      },
+      field: { x: 368, y: 1024, w: 16, h: 16 },
     },
     brownWindow: {
       corners: {
@@ -298,27 +330,55 @@ export const spriteSheetData = {
   },
 };
 
+export const itemsData = {
+  potions: {
+    red: {
+      big: {
+        name: "Czerwona mikstura duża",
+        description: "Przywraca 100 HP",
+        id: "potionRedBig",
+        sprite: spriteSheetData.items.potions.red.big,
+      },
+    },
+  },
+};
+
 export const weapons = {
+  knife: {
+    rotate180WhileHolding: false,
+    sprite: spriteSheetData.items.weapons.knife,
+    name: "Nóż",
+    dmg: 10,
+    attackSpeed: 5,
+    description: "Mały nóż.",
+    id: "knife",
+  },
   silverSword: {
     rotate180WhileHolding: false,
     sprite: spriteSheetData.items.weapons.silverSword,
-    name: "Silver Sword",
+    name: "Srebrny Miecz",
     dmg: 10,
     attackSpeed: 5,
+    description: "Duży miecz wykonany ze srebra i to nawet ciężki.",
+    id: "silverSword",
   },
   heavyMace: {
     rotate180WhileHolding: true,
     sprite: spriteSheetData.items.weapons.heavyMace,
-    name: "Heavy Mace",
+    name: "Ciężka maczuga",
     dmg: 20,
     attackSpeed: 3,
+    description: "Nooo jak jeb... tooo.",
+    id: "heavyMace",
   },
   spear: {
     rotate180WhileHolding: true,
     sprite: spriteSheetData.items.weapons.spear,
-    name: "Spear",
+    name: "włócznia",
     dmg: 20,
     attackSpeed: 3,
+    description: "Drewniana włócznia .",
+    id: "spear",
   },
 };
 

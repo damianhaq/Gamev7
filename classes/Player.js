@@ -1,4 +1,4 @@
-import { items } from "../app.js";
+import { detailsWindow, items } from "../app.js";
 import { calculateDirection, calculateDistance, getAngleBetweenPoints } from "../functions.js";
 import { gameData, keys } from "../gameData.js";
 import { Character } from "./Character.js";
@@ -112,6 +112,7 @@ export class Player extends Character {
         gameData.playerInventory.push(item);
         items.splice(index, 1);
         // console.log("Ekwipunek: ", gameData.playerInventory, "Itemki na ziemi:", items);
+        // console.log(detailsWindow);
       }
     });
   }

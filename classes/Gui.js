@@ -1,5 +1,10 @@
-import { c, spriteSheet } from "../app.js";
-import { drawSprite, drawText, getItemPosFromIndexInInventory } from "../functions.js";
+import { c, detailsWindow, spriteSheet } from "../app.js";
+import {
+  checkIsMouseOverItem,
+  drawSprite,
+  drawText,
+  getItemPosFromIndexInInventory,
+} from "../functions.js";
 import { gameData, keys, spriteSheetData } from "../gameData.js";
 
 export class Gui {
@@ -218,6 +223,7 @@ export class Text extends Gui {
     this.outline = true;
     this.font = {
       color: "#fff",
+      outlineColor: "#262b44",
       size: 7,
     };
   }
@@ -229,7 +235,6 @@ export class Text extends Gui {
     if (this.parent.h !== parentData.h) this.parent.h = parentData.h;
 
     c.save();
-    c.fillStyle = this.font.color;
     c.font = `${this.font.size}px MinimalPixelv2`;
     c.textAlign = "start"; // Possible values: start, end, left, right or center.
 
@@ -245,7 +250,13 @@ export class Text extends Gui {
       y2 = this.parent.y + this.parent.h / 2 + this.font.size / 2;
     } else y2 = this.y + this.parent.y;
 
+    if (this.outline) {
+      c.fillStyle = this.font.outlineColor;
+      c.fillText(this.text, x2, y2 + 1);
+    }
+    c.fillStyle = this.font.color;
     c.fillText(this.text, x2, y2);
+
     // c.beginPath();
     // c.arc(x2, y2, 5, 0, Math.PI * 2);
     // c.stroke();
@@ -301,6 +312,8 @@ export class Inventory extends Gui {
     this.cellsW = cellsW;
     this.cellsH = cellsH;
     this.spriteSheetData = spriteSheetData;
+
+    this.isOverItem = false;
   }
 
   toUpdate(parentData) {
@@ -309,6 +322,7 @@ export class Inventory extends Gui {
     if (this.parent.w !== parentData.w) this.parent.w = parentData.w;
     if (this.parent.h !== parentData.h) this.parent.h = parentData.h;
 
+    // draw empty cells
     let x2, y2;
     if (this.x === "center") {
       x2 = this.parent.w / 2 - this.w / 2;
@@ -337,22 +351,99 @@ export class Inventory extends Gui {
   }
 
   drawItems(x2, y2, cellsW, cellsH) {
+    let over = false;
     gameData.playerInventory.forEach((item, index) => {
       const pos = getItemPosFromIndexInInventory(index, x2, y2, cellsW, cellsH);
-      // console.log(x2, y2);
 
-      // drawSprite(item.spriteSheetData, pos.x, pos.y, 0, 0, 0, false);
+      if (checkIsMouseOverItem(pos.x, pos.y, 16, 16, keys.mouse.x, keys.mouse.y)) {
+        over = true;
+        detailsWindow.addData(item);
+      }
+
+      if (typeof item.itemData.sprite === "undefined") return;
       c.drawImage(
         spriteSheet,
-        item.spriteSheetData.x,
-        item.spriteSheetData.y,
-        item.spriteSheetData.w,
-        item.spriteSheetData.h,
-        pos.x + 8 - item.spriteSheetData.w / 2,
-        pos.y + 8 - item.spriteSheetData.h / 2,
-        item.spriteSheetData.w,
-        item.spriteSheetData.h
+        item.itemData.sprite.x,
+        item.itemData.sprite.y,
+        item.itemData.sprite.w,
+        item.itemData.sprite.h,
+        pos.x + 8 - item.itemData.sprite.w / 2,
+        pos.y + 8 - item.itemData.sprite.h / 2,
+        item.itemData.sprite.w,
+        item.itemData.sprite.h
       );
     });
+    if (!over) detailsWindow.addData(null);
+  }
+}
+
+export class DetailsWindow extends Gui {
+  constructor(cellsW, cellsH) {
+    super();
+    this.x = 0;
+    this.y = 0;
+    this.w = cellsW * 16;
+    this.h = cellsH * 16;
+    this.cellsW = cellsW;
+    this.cellsH = cellsH;
+    this.data = null;
+  }
+
+  addData(data) {
+    this.data = data;
+    if (data !== null) {
+      this.title = new Text("center", 12, this.data.itemData.name);
+      this.description = new Text("center", 22, this.data.itemData.description);
+    }
+  }
+
+  update() {
+    if (this.data === null) return;
+
+    this.x = keys.mouse.x + 10;
+    this.y = keys.mouse.y;
+    for (let i = 0; i < this.cellsH; i++) {
+      for (let j = 0; j < this.cellsW; j++) {
+        let cell = spriteSheetData.gui.detailsWindow.field;
+
+        // draw edges
+        if (i === 0) cell = spriteSheetData.gui.detailsWindow.edges.top;
+        if (i === this.cellsH - 1) cell = spriteSheetData.gui.detailsWindow.edges.bottom;
+        if (j === this.cellsW - 1) cell = spriteSheetData.gui.detailsWindow.edges.right;
+        if (j === 0) cell = spriteSheetData.gui.detailsWindow.edges.left;
+
+        // draw corners
+        if (i === 0 && j === 0) cell = spriteSheetData.gui.detailsWindow.corners.leftTop;
+        if (i === 0 && j === this.cellsW - 1)
+          cell = spriteSheetData.gui.detailsWindow.corners.topRight;
+        if (i === this.cellsH - 1 && j === 0)
+          cell = spriteSheetData.gui.detailsWindow.corners.leftBottom;
+        if (i === this.cellsH - 1 && j === this.cellsW - 1)
+          cell = spriteSheetData.gui.detailsWindow.corners.rightBottom;
+
+        c.drawImage(
+          spriteSheet,
+          cell.x,
+          cell.y,
+          cell.w,
+          cell.h,
+          this.x + 0 * j + j * 16,
+          this.y + 0 * i + i * 16,
+          16,
+          16
+        );
+      }
+    }
+
+    // console.log(this.title);
+    this.title.toUpdate({ x: this.x, y: this.y, w: this.w, h: this.h });
+    this.description.toUpdate({ x: this.x, y: this.y, w: this.w, h: this.h });
+
+    // update child's
+    if (this.childs.length > 0) {
+      this.childs.forEach((el) => {
+        el.toUpdate({ x: this.x, y: this.y, w: this.w, h: this.h });
+      });
+    }
   }
 }

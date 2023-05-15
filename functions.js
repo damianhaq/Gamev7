@@ -1,5 +1,5 @@
 import { c, debugP, guis, player, spriteSheet } from "./app.js";
-import { Window, Text, Button, Icon, Inventory } from "./classes/Gui.js";
+import { Window, Text, Button, Icon, Inventory, DetailsWindow } from "./classes/Gui.js";
 import { gameData, keys, map, spriteSheetData } from "./gameData.js";
 
 export function camera(x, y) {
@@ -39,6 +39,7 @@ export function controls() {
     keys.mouse.click = true;
     keys.mouse.x = ev.offsetX / gameData.scale;
     keys.mouse.y = ev.offsetY / gameData.scale;
+    console.log(guis);
     if (ev.detail > 1) {
       ev.preventDefault();
       // of course, you still do not know what you prevent here...
@@ -55,10 +56,12 @@ export function controls() {
     keys.mouse.x = ev.offsetX / gameData.scale;
     keys.mouse.y = ev.offsetY / gameData.scale;
 
+    // mouseIsOnGuiCheck nie działa poprawnie
     mouseIsOnGuiCheck(ev.offsetX / gameData.scale, ev.offsetY / gameData.scale);
   });
 }
 
+// mouseIsOnGuiCheck nie działa poprawnie, ponieważ on pobiera x i y z elementów z guis, a jeśli są "center" to wtedy nie działa
 function mouseIsOnGuiCheck(mouseX, mouseY) {
   guis.forEach((el) => {
     if (
@@ -363,6 +366,7 @@ export function loadGUI() {
   bottomWindow.addChilds([devButton, inventoryButton]);
   devButton.addChilds([devText]);
   inventoryButton.addChilds([inventoryText]);
+
   console.log(guis);
 }
 
@@ -371,4 +375,11 @@ export function getItemPosFromIndexInInventory(index, inventoryX, inventoryY, ti
   const column = index % tilesW; // numer kolumny
   // console.log(row, column);
   return { x: column * 16 + inventoryX, y: row * 16 + inventoryY };
+}
+
+export function checkIsMouseOverItem(itemX, itemY, itemW, itemH, mouseX, mouseY) {
+  if (mouseX > itemX && mouseX < itemX + itemW && mouseY > itemY && mouseY < itemY + itemH) {
+    return true;
+  }
+  return false;
 }

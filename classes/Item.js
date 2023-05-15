@@ -1,22 +1,24 @@
 import { drawSprite } from "../functions.js";
 
 export class Item {
-  constructor(x, y, spriteSheetData, isFlipX, angle, id) {
+  constructor(x, y, isFlipX, angle, itemData) {
     this.x = x;
     this.y = y;
-    this.spriteSheetData = spriteSheetData;
+    // this.spriteSheetData = spriteSheetData;
     this.isFlipX = isFlipX;
     this.angle = angle;
-    this.id = id;
+    this.itemData = itemData;
+    // console.log(this.itemData.spriteSheetData.w);
   }
 
   update() {
+    if (typeof this.itemData.sprite === "undefined") return;
     drawSprite(
-      this.spriteSheetData,
+      this.itemData.sprite,
       this.x,
       this.y,
-      this.spriteSheetData.w / 2,
-      this.spriteSheetData.h / 2,
+      this.itemData.sprite.w / 2,
+      this.itemData.sprite.h / 2,
       this.angle,
       this.isFlipX
     );
