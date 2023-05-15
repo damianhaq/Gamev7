@@ -1,9 +1,9 @@
 import { Enemy } from "./classes/Enemy.js";
-import { Button, Gui, Text, Window } from "./classes/Gui.js";
+import { DetailsWindow, Icon } from "./classes/Gui.js";
 import { Item } from "./classes/Item.js";
 import { Player } from "./classes/Player.js";
 import { camera, controls, debug, drawMap, loadGUI, scrollToBottom } from "./functions.js";
-import { gameData, map, spriteSheetData, variables, weapons } from "./gameData.js";
+import { gameData, itemsData, map, spriteSheetData, variables, weapons } from "./gameData.js";
 
 const canvas = document.querySelector("#canvas");
 canvas.width = 1300;
@@ -38,7 +38,7 @@ spriteSheet.onload = () => {
 export const player = new Player(
   100,
   300,
-  spriteSheetData.purpleKnight,
+  spriteSheetData.elfM,
   weapons.silverSword,
   variables.characterGroups.ally
 );
@@ -61,8 +61,19 @@ const enemy2 = new Enemy(
 export const guis = [];
 loadGUI();
 
-const items = [];
-items.push(new Item(50, 50, spriteSheetData.items.weapons.silverSword, false, 0, "0"));
+// details window
+export const detailsWindow = new DetailsWindow(7, 8);
+
+guis.push(detailsWindow);
+
+export const items = [];
+const sword1 = new Item(200, 270, false, 0, weapons.silverSword);
+const knife = new Item(250, 270, false, 0, weapons.knife);
+items.push(sword1, knife);
+
+for (let i = 0; i < 20; i++) {
+  items.push(new Item(200 + 10 * i, 300, false, 0, itemsData.potions.red.big));
+}
 
 // ---- GAME LOOP ----
 let lastTime = 0;
@@ -73,7 +84,7 @@ function animate(currentTime) {
   counter++;
   deltaTime = currentTime - lastTime;
   lastTime = currentTime;
-  // const fps = Math.round(1000 / deltaTime);
+  const fps = Math.round(1000 / deltaTime);
 
   c.fillStyle = "#2e2e35";
   c.fillRect(0, 0, canvas.clientWidth, canvas.height);
@@ -92,11 +103,15 @@ function animate(currentTime) {
 
   guis.forEach((el) => el.update());
 
-  // if (counter % 100 === 0) {
-  // debug(
-  //   `deltaTime:${deltaTime}   Player: x:${player.x} y:${player.y}  Camera: x:${gameData.camera.x} y:${gameData.camera.y}`
-  // );
-  // }
+  if (counter % 100 === 0) {
+    debug(
+      `deltaTime:${deltaTime.toFixed(1)} FPS:${fps}  Player: x:${player.x.toFixed(
+        1
+      )} y:${player.y.toFixed(1)}  Camera: x:${gameData.camera.x.toFixed(
+        1
+      )} y:${gameData.camera.y.toFixed(1)}`
+    );
+  }
 
   requestAnimationFrame(animate);
 }

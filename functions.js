@@ -1,5 +1,5 @@
 import { c, debugP, guis, player, spriteSheet } from "./app.js";
-import { Window, Text, Button, Icon } from "./classes/Gui.js";
+import { Window, Text, Button, Icon, Inventory, DetailsWindow } from "./classes/Gui.js";
 import { gameData, keys, map, spriteSheetData } from "./gameData.js";
 
 export function camera(x, y) {
@@ -39,6 +39,7 @@ export function controls() {
     keys.mouse.click = true;
     keys.mouse.x = ev.offsetX / gameData.scale;
     keys.mouse.y = ev.offsetY / gameData.scale;
+    console.log(guis);
     if (ev.detail > 1) {
       ev.preventDefault();
       // of course, you still do not know what you prevent here...
@@ -55,10 +56,12 @@ export function controls() {
     keys.mouse.x = ev.offsetX / gameData.scale;
     keys.mouse.y = ev.offsetY / gameData.scale;
 
+    // mouseIsOnGuiCheck nie działa poprawnie
     mouseIsOnGuiCheck(ev.offsetX / gameData.scale, ev.offsetY / gameData.scale);
   });
 }
 
+// mouseIsOnGuiCheck nie działa poprawnie, ponieważ on pobiera x i y z elementów z guis, a jeśli są "center" to wtedy nie działa
 function mouseIsOnGuiCheck(mouseX, mouseY) {
   guis.forEach((el) => {
     if (
@@ -111,6 +114,10 @@ export function drawSprite(spriteSheetData, x, y, originX, originY, angleDeg, is
   if (gameData.showHitBox) {
     c.beginPath();
     c.rect(-originX, -originY, spriteSheetData.w, spriteSheetData.h);
+    c.stroke();
+
+    c.beginPath();
+    c.arc(0, 0, 2, 0, Math.PI * 2);
     c.stroke();
   }
   c.restore();
@@ -190,7 +197,7 @@ export function drawMap() {
         if (obj.point) {
           c.fillStyle = "white";
           // c.font = "16px sans";
-          drawText(obj.x, obj.y - 10, obj.name);
+          drawText(obj.x + gameData.camera.x, obj.y + gameData.camera.y - 10, obj.name);
           drawRect(obj.x, obj.y, 1, 1);
         }
 
@@ -240,10 +247,12 @@ export function drawRect(x, y, w, h) {
   c.stroke();
 }
 export function drawText(x, y, text) {
-  c.beginPath();
+  c.save();
+  c.fillStyle = "#fff";
+  c.font = `8px MinimalPixelv2`;
 
-  c.fillText(text, x + gameData.camera.x, y + gameData.camera.y);
-  c.stroke();
+  c.fillText(text, x, y);
+  c.restore();
 }
 
 export function calculateEndpoint(startPoint, length, angle) {
@@ -299,6 +308,24 @@ export function loadGUI() {
   });
   const devText = new Text("center", "center", "Dev");
 
+  const inventoryButton = new Button(3 * 16 + 7, 7, 4, () => {
+    if (gameData.gui.isInventoryWindowOpen) {
+      gameData.gui.isInventoryWindowOpen = false;
+      const index = guis.findIndex((el) => el.id === "inventoryWindow");
+      if (index !== -1) guis.splice(index, 1);
+    } else {
+      gameData.gui.isInventoryWindowOpen = true;
+      guis.push(inventoryWindow);
+    }
+  });
+  const inventoryText = new Text("center", "center", "Ekwipunek");
+
+  // Inventory
+  const inventoryWindow = new Window(1, 33, 10, 13, spriteSheetData.gui.brownWindow, true);
+  inventoryWindow.id = "inventoryWindow";
+  const inventoryWindowTitle = new Text("center", 18, "Ekwipunek");
+  const inventory = new Inventory("center", 25, 9, 11, spriteSheetData.gui.yellowTile);
+
   // dev window
   const devWindow = new Window(320, 80, 7, 5, spriteSheetData.gui.blueWindow, true);
   devWindow.id = "devWindow";
@@ -329,10 +356,30 @@ export function loadGUI() {
   if (gameData.gui.isDevWindowOpen) {
     guis.push(devWindow);
   }
+  if (gameData.gui.isInventoryWindowOpen) {
+    guis.push(inventoryWindow);
+  }
 
   guis.push(topWindow, bottomWindow);
   devWindow.addChilds([title, showHitBoxText, hitboxCheckbox]);
-  bottomWindow.addChilds([devButton]);
+  inventoryWindow.addChilds([inventory, inventoryWindowTitle]);
+  bottomWindow.addChilds([devButton, inventoryButton]);
   devButton.addChilds([devText]);
+  inventoryButton.addChilds([inventoryText]);
+
   console.log(guis);
+}
+
+export function getItemPosFromIndexInInventory(index, inventoryX, inventoryY, tilesW, tilesH) {
+  const row = Math.floor(index / tilesW); // numer wiersza
+  const column = index % tilesW; // numer kolumny
+  // console.log(row, column);
+  return { x: column * 16 + inventoryX, y: row * 16 + inventoryY };
+}
+
+export function checkIsMouseOverItem(itemX, itemY, itemW, itemH, mouseX, mouseY) {
+  if (mouseX > itemX && mouseX < itemX + itemW && mouseY > itemY && mouseY < itemY + itemH) {
+    return true;
+  }
+  return false;
 }
