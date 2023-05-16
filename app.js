@@ -59,12 +59,13 @@ const enemy2 = new Enemy(
 );
 
 export const guis = [];
+export const guis2 = [];
 loadGUI();
 
 // details window
 export const detailsWindow = new DetailsWindow(7, 8);
 
-guis.push(detailsWindow);
+guis2.push(detailsWindow);
 
 export const items = [];
 const sword1 = new Item(200, 270, false, 0, weapons.silverSword);
@@ -102,6 +103,7 @@ function animate(currentTime) {
   camera(player.x, player.y);
 
   guis.forEach((el) => el.update());
+  guis2.forEach((el) => el.update());
 
   if (counter % 100 === 0) {
     debug(
