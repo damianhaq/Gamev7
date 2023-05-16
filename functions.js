@@ -1,4 +1,4 @@
-import { c, debugP, guis, player, spriteSheet } from "./app.js";
+import { c, debugP, guis, guis2, player, spriteSheet } from "./app.js";
 import { Window, Text, Button, Icon, Inventory, DetailsWindow } from "./classes/Gui.js";
 import { gameData, keys, map, spriteSheetData } from "./gameData.js";
 
@@ -39,7 +39,7 @@ export function controls() {
     keys.mouse.click = true;
     keys.mouse.x = ev.offsetX / gameData.scale;
     keys.mouse.y = ev.offsetY / gameData.scale;
-    console.log(guis);
+    console.log(guis, guis2, gameData.playerInventory);
     if (ev.detail > 1) {
       ev.preventDefault();
       // of course, you still do not know what you prevent here...
@@ -246,12 +246,17 @@ export function drawRect(x, y, w, h) {
   c.rect(x + gameData.camera.x, y + gameData.camera.y, w, h);
   c.stroke();
 }
-export function drawText(x, y, text) {
+export function drawText(x, y, text, data = { size: 8, textAlign: "start" }) {
   c.save();
-  c.fillStyle = "#fff";
-  c.font = `8px MinimalPixelv2`;
+  c.font = `${data.size}px MinimalPixelv2`;
+  c.textAlign = data.textAlign;
 
+  c.fillStyle = "#262b44";
+  c.fillText(text, x, y + 1);
+
+  c.fillStyle = "#fff";
   c.fillText(text, x, y);
+
   c.restore();
 }
 
@@ -356,6 +361,7 @@ export function loadGUI() {
   if (gameData.gui.isDevWindowOpen) {
     guis.push(devWindow);
   }
+
   if (gameData.gui.isInventoryWindowOpen) {
     guis.push(inventoryWindow);
   }

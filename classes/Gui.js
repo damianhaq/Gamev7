@@ -346,7 +346,6 @@ export class Inventory extends Gui {
         );
       }
     }
-
     this.drawItems(x2 + parentData.x, y2 + parentData.y, this.cellsW, this.cellsH);
   }
 
@@ -357,21 +356,34 @@ export class Inventory extends Gui {
 
       if (checkIsMouseOverItem(pos.x, pos.y, 16, 16, keys.mouse.x, keys.mouse.y)) {
         over = true;
-        detailsWindow.addData(item);
+        detailsWindow.addData(item.item);
       }
 
-      if (typeof item.itemData.sprite === "undefined") return;
+      if (typeof item.item.itemData.sprite === "undefined") return;
       c.drawImage(
         spriteSheet,
-        item.itemData.sprite.x,
-        item.itemData.sprite.y,
-        item.itemData.sprite.w,
-        item.itemData.sprite.h,
-        pos.x + 8 - item.itemData.sprite.w / 2,
-        pos.y + 8 - item.itemData.sprite.h / 2,
-        item.itemData.sprite.w,
-        item.itemData.sprite.h
+        item.item.itemData.sprite.x,
+        item.item.itemData.sprite.y,
+        item.item.itemData.sprite.w,
+        item.item.itemData.sprite.h,
+        pos.x + 8 - item.item.itemData.sprite.w / 2,
+        pos.y + 8 - item.item.itemData.sprite.h / 2,
+        item.item.itemData.sprite.w,
+        item.item.itemData.sprite.h
       );
+      if (item.stack > 1) {
+        drawSprite(
+          spriteSheetData.gui.stackNumberTile,
+          pos.x - gameData.camera.x + 9,
+          pos.y - gameData.camera.y + 9,
+          0,
+          0,
+          0,
+          false
+        );
+
+        drawText(pos.x + 13, pos.y + 15, item.stack, { size: 5, textAlign: "center" });
+      }
     });
     if (!over) detailsWindow.addData(null);
   }
@@ -394,6 +406,7 @@ export class DetailsWindow extends Gui {
     if (data !== null) {
       this.title = new Text("center", 12, this.data.itemData.name);
       this.description = new Text("center", 22, this.data.itemData.description);
+      this.descId = new Text("center", 32, this.data.itemData.id);
     }
   }
 
@@ -438,6 +451,7 @@ export class DetailsWindow extends Gui {
     // console.log(this.title);
     this.title.toUpdate({ x: this.x, y: this.y, w: this.w, h: this.h });
     this.description.toUpdate({ x: this.x, y: this.y, w: this.w, h: this.h });
+    this.descId.toUpdate({ x: this.x, y: this.y, w: this.w, h: this.h });
 
     // update child's
     if (this.childs.length > 0) {

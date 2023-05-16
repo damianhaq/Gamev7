@@ -327,6 +327,7 @@ export const spriteSheetData = {
       pause: { x: 245, y: 1252, w: 6, h: 8 },
     },
     yellowTile: { x: 176, y: 1472, w: 16, h: 16 },
+    stackNumberTile: { x: 208, y: 1472, w: 7, h: 7 },
   },
 };
 
@@ -338,6 +339,7 @@ export const itemsData = {
         description: "Przywraca 100 HP",
         id: "potionRedBig",
         sprite: spriteSheetData.items.potions.red.big,
+        stackNumber: 10,
       },
     },
   },
@@ -352,6 +354,7 @@ export const weapons = {
     attackSpeed: 5,
     description: "Mały nóż.",
     id: "knife",
+    stackNumber: 0,
   },
   silverSword: {
     rotate180WhileHolding: false,
@@ -361,6 +364,7 @@ export const weapons = {
     attackSpeed: 5,
     description: "Duży miecz wykonany ze srebra i to nawet ciężki.",
     id: "silverSword",
+    stackNumber: 0,
   },
   heavyMace: {
     rotate180WhileHolding: true,
@@ -370,6 +374,7 @@ export const weapons = {
     attackSpeed: 3,
     description: "Nooo jak jeb... tooo.",
     id: "heavyMace",
+    stackNumber: 0,
   },
   spear: {
     rotate180WhileHolding: true,
@@ -379,6 +384,7 @@ export const weapons = {
     attackSpeed: 3,
     description: "Drewniana włócznia .",
     id: "spear",
+    stackNumber: 0,
   },
 };
 

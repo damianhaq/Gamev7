@@ -109,10 +109,30 @@ export class Player extends Character {
       if (dist <= 3) {
         item.x = 0;
         item.y = 0;
-        gameData.playerInventory.push(item);
+
+        // for (let i = 0; i < gameData.playerInventory.length; i++) {
+        //   console.log("Asd");
+        // }
+        let itemIsInInventory = false;
+        gameData.playerInventory.forEach((invItem, index) => {
+          if (invItem.item.itemData.id === item.itemData.id) {
+            itemIsInInventory = index;
+          }
+        });
+
+        if (itemIsInInventory === false) {
+          gameData.playerInventory.push({ item: item, stack: 1 });
+        } else {
+          gameData.playerInventory[itemIsInInventory].stack += 1;
+        }
+
+        // if (gameData.playerInventory.length === 0) {
+        //   console.log("powinno wykonać sie raz");
+        //   gameData.playerInventory.push({ item: item, stack: 1 });
+        // }
+
         items.splice(index, 1);
-        // console.log("Ekwipunek: ", gameData.playerInventory, "Itemki na ziemi:", items);
-        // console.log(detailsWindow);
+        console.log(gameData.playerInventory);
       }
     });
   }
