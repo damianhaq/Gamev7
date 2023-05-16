@@ -389,3 +389,22 @@ export function checkIsMouseOverItem(itemX, itemY, itemW, itemH, mouseX, mouseY)
   }
   return false;
 }
+
+export function addItemToInventory(item, inventory) {
+  let itemIsInInventory = false;
+
+  inventory.forEach((invItem, index) => {
+    if (
+      invItem.item.itemData.id === item.itemData.id &&
+      invItem.stack < item.itemData.stackNumber
+    ) {
+      itemIsInInventory = index;
+    }
+  });
+
+  if (itemIsInInventory === false) {
+    inventory.push({ item: item, stack: 1 });
+  } else {
+    inventory[itemIsInInventory].stack += 1;
+  }
+}

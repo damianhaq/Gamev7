@@ -1,5 +1,10 @@
 import { detailsWindow, items } from "../app.js";
-import { calculateDirection, calculateDistance, getAngleBetweenPoints } from "../functions.js";
+import {
+  addItemToInventory,
+  calculateDirection,
+  calculateDistance,
+  getAngleBetweenPoints,
+} from "../functions.js";
 import { gameData, keys } from "../gameData.js";
 import { Character } from "./Character.js";
 
@@ -110,26 +115,7 @@ export class Player extends Character {
         item.x = 0;
         item.y = 0;
 
-        // for (let i = 0; i < gameData.playerInventory.length; i++) {
-        //   console.log("Asd");
-        // }
-        let itemIsInInventory = false;
-        gameData.playerInventory.forEach((invItem, index) => {
-          if (invItem.item.itemData.id === item.itemData.id) {
-            itemIsInInventory = index;
-          }
-        });
-
-        if (itemIsInInventory === false) {
-          gameData.playerInventory.push({ item: item, stack: 1 });
-        } else {
-          gameData.playerInventory[itemIsInInventory].stack += 1;
-        }
-
-        // if (gameData.playerInventory.length === 0) {
-        //   console.log("powinno wykonać sie raz");
-        //   gameData.playerInventory.push({ item: item, stack: 1 });
-        // }
+        addItemToInventory(item, gameData.playerInventory);
 
         items.splice(index, 1);
         console.log(gameData.playerInventory);
