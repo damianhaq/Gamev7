@@ -144,6 +144,7 @@ export const spriteSheetData = {
     potions: {
       red: {
         big: { x: 147, y: 996, w: 10, h: 11 },
+        small: { x: 148, y: 1012, w: 8, h: 11 },
       },
     },
   },
@@ -339,6 +340,13 @@ export const itemsData = {
         description: "Przywraca 100 HP",
         id: "potionRedBig",
         sprite: spriteSheetData.items.potions.red.big,
+        stackNumber: 10,
+      },
+      small: {
+        name: "Czerwona mikstura mała",
+        description: "Przywraca 50 HP",
+        id: "potionRedSmall",
+        sprite: spriteSheetData.items.potions.red.small,
         stackNumber: 10,
       },
     },

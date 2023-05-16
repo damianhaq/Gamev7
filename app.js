@@ -74,6 +74,7 @@ items.push(sword1, knife);
 
 for (let i = 0; i < 20; i++) {
   items.push(new Item(200 + 10 * i, 300, false, 0, itemsData.potions.red.big));
+  items.push(new Item(220 + 10 * i, 320, false, 0, itemsData.potions.red.small));
 }
 
 // ---- GAME LOOP ----
