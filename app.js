@@ -2,7 +2,15 @@ import { Enemy } from "./classes/Enemy.js";
 import { DetailsWindow, Icon } from "./classes/Gui.js";
 import { Item } from "./classes/Item.js";
 import { Player } from "./classes/Player.js";
-import { camera, controls, debug, drawMap, loadGUI, scrollToBottom } from "./functions.js";
+import {
+  camera,
+  controls,
+  debug,
+  drawItemWhenHolding,
+  drawMap,
+  loadGUI,
+  scrollToBottom,
+} from "./functions.js";
 import { gameData, itemsData, map, spriteSheetData, variables, weapons } from "./gameData.js";
 
 const canvas = document.querySelector("#canvas");
@@ -105,6 +113,8 @@ function animate(currentTime) {
 
   guis.forEach((el) => el.update());
   guis2.forEach((el) => el.update());
+
+  drawItemWhenHolding();
 
   if (counter % 100 === 0) {
     debug(

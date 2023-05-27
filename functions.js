@@ -390,21 +390,52 @@ export function checkIsMouseOverItem(itemX, itemY, itemW, itemH, mouseX, mouseY)
   return false;
 }
 
-export function addItemToInventory(item, inventory) {
-  let itemIsInInventory = false;
-
-  inventory.forEach((invItem, index) => {
-    if (
-      invItem.item.itemData.id === item.itemData.id &&
-      invItem.stack < item.itemData.stackNumber
-    ) {
-      itemIsInInventory = index;
-    }
-  });
-
-  if (itemIsInInventory === false) {
-    inventory.push({ item: item, stack: 1 });
+export function addItemToInventory(item, inventory, indexTo = false, stack = 1) {
+  if (indexTo !== false) {
+    inventory[indexTo] = { item: item, stack: stack };
   } else {
-    inventory[itemIsInInventory].stack += 1;
+    let firstNullIndex = false;
+    let firstToStackIndex = false;
+
+    for (let i = 0; i < inventory.length; i++) {
+      // find first null
+      if (inventory[i] === null && firstNullIndex === false) {
+        firstNullIndex = i;
+      }
+
+      // if its not null
+      if (inventory[i] !== null) {
+        // find first item to stack
+        if (
+          inventory[i].item.itemData.id === item.itemData.id &&
+          inventory[i].stack < item.itemData.stackNumber &&
+          firstToStackIndex === false
+        ) {
+          firstToStackIndex = i;
+        }
+      }
+    }
+
+    // if find
+    if (firstToStackIndex !== false) {
+      inventory[firstToStackIndex].stack += 1;
+    } else if (firstNullIndex !== false) {
+      inventory[firstNullIndex] = { item: item, stack: stack };
+    }
+  }
+}
+
+export function drawItemWhenHolding() {
+  if (gameData.holdingItem.length > 0 && gameData.holdingItem[0] !== null) {
+    // console.log("rysuje", gameData.holdingItem[0].item.itemData.sprite);
+    drawSprite(
+      gameData.holdingItem[0].item.itemData.sprite,
+      keys.mouse.x - gameData.camera.x,
+      keys.mouse.y - gameData.camera.y,
+      gameData.holdingItem[0].item.itemData.sprite.w / 2,
+      gameData.holdingItem[0].item.itemData.sprite.h / 2,
+      0,
+      false
+    );
   }
 }

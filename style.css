@@ -79,6 +79,7 @@ li:hover {
   /* background-color: #33333b; */
 }
 
+.toDo::before,
 .bugFix::before,
 .yt::before {
   /* margin-left: auto; */
@@ -95,6 +96,9 @@ li:hover {
 }
 .yt::before {
   content: "#YouTube";
+}
+.toDo::before {
+  content: "#ToDo";
 }
 a {
   color: #33acff;
