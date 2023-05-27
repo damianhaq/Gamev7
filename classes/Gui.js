@@ -1,5 +1,6 @@
 import { c, detailsWindow, spriteSheet } from "../app.js";
 import {
+  addItemToInventory,
   checkIsMouseOverItem,
   drawSprite,
   drawText,
@@ -313,7 +314,16 @@ export class Inventory extends Gui {
     this.cellsH = cellsH;
     this.spriteSheetData = spriteSheetData;
 
-    this.isOverItem = false;
+    this.mouseFlag = false;
+
+    // dodaj 99x null do inventory ptzy twożeniu
+    this.prepareInventory();
+  }
+
+  prepareInventory() {
+    for (let i = 0; i < 99; i++) {
+      gameData.playerInventory[i] = null;
+    }
   }
 
   toUpdate(parentData) {
@@ -344,48 +354,130 @@ export class Inventory extends Gui {
           16,
           16
         );
+
+        // mouse pos
+        if (
+          checkIsMouseOverItem(
+            x2 + 0 * j + j * 16 + parentData.x,
+            y2 + 0 * i + i * 16 + parentData.y,
+            16,
+            16,
+            keys.mouse.x,
+            keys.mouse.y
+          ) &&
+          keys.mouse.click
+        ) {
+          this.mouseFlag = true;
+        }
+
+        if (
+          gameData.holdingItem[0] !== null &&
+          !keys.mouse.click &&
+          this.mouseFlag === true &&
+          checkIsMouseOverItem(
+            x2 + 0 * j + j * 16 + parentData.x,
+            y2 + 0 * i + i * 16 + parentData.y,
+            16,
+            16,
+            keys.mouse.x,
+            keys.mouse.y
+          )
+        ) {
+          let index = j + i * this.cellsW;
+
+          console.log("upusc", gameData.holdingItem[0], "na poztycji", index);
+          // add item to inventory in specific place
+
+          addItemToInventory(
+            gameData.holdingItem[0].item,
+            gameData.playerInventory,
+            index,
+            gameData.holdingItem[0].stack
+          );
+          // remove from "mouse holding"
+          gameData.holdingItem[0] = null;
+
+          this.mouseFlag = false;
+        }
       }
     }
     this.drawItems(x2 + parentData.x, y2 + parentData.y, this.cellsW, this.cellsH);
+    this.moveItem(x2 + parentData.x, y2 + parentData.y, this.cellsW, this.cellsH);
   }
 
   drawItems(x2, y2, cellsW, cellsH) {
     let over = false;
     gameData.playerInventory.forEach((item, index) => {
-      const pos = getItemPosFromIndexInInventory(index, x2, y2, cellsW, cellsH);
+      // console.log("if (item !== null)", item);
+      if (item !== null) {
+        const pos = getItemPosFromIndexInInventory(index, x2, y2, cellsW, cellsH);
 
-      if (checkIsMouseOverItem(pos.x, pos.y, 16, 16, keys.mouse.x, keys.mouse.y)) {
-        over = true;
-        detailsWindow.addData(item.item);
-      }
+        if (checkIsMouseOverItem(pos.x, pos.y, 16, 16, keys.mouse.x, keys.mouse.y)) {
+          over = true;
+          // console.log("addData", item.item);
+          detailsWindow.addData(item.item);
+        }
 
-      if (typeof item.item.itemData.sprite === "undefined") return;
-      c.drawImage(
-        spriteSheet,
-        item.item.itemData.sprite.x,
-        item.item.itemData.sprite.y,
-        item.item.itemData.sprite.w,
-        item.item.itemData.sprite.h,
-        pos.x + 8 - item.item.itemData.sprite.w / 2,
-        pos.y + 8 - item.item.itemData.sprite.h / 2,
-        item.item.itemData.sprite.w,
-        item.item.itemData.sprite.h
-      );
-      if (item.stack > 1) {
-        drawSprite(
-          spriteSheetData.gui.stackNumberTile,
-          pos.x - gameData.camera.x + 9,
-          pos.y - gameData.camera.y + 9,
-          0,
-          0,
-          0,
-          false
+        if (typeof item.item.itemData.sprite === "undefined") return;
+
+        c.drawImage(
+          spriteSheet,
+          item.item.itemData.sprite.x,
+          item.item.itemData.sprite.y,
+          item.item.itemData.sprite.w,
+          item.item.itemData.sprite.h,
+          pos.x + 8 - item.item.itemData.sprite.w / 2,
+          pos.y + 8 - item.item.itemData.sprite.h / 2,
+          item.item.itemData.sprite.w,
+          item.item.itemData.sprite.h
         );
+        if (item.stack > 1) {
+          drawSprite(
+            spriteSheetData.gui.stackNumberTile,
+            pos.x - gameData.camera.x + 9,
+            pos.y - gameData.camera.y + 9,
+            0,
+            0,
+            0,
+            false
+          );
 
-        drawText(pos.x + 13, pos.y + 15, item.stack, { size: 5, textAlign: "center" });
+          drawText(pos.x + 13, pos.y + 15, item.stack, { size: 5, textAlign: "center" });
+        }
       }
     });
+
     if (!over) detailsWindow.addData(null);
+  }
+
+  moveItem(x2, y2, cellsW, cellsH) {
+    gameData.playerInventory.forEach((item, index) => {
+      if (item === null) return;
+      const pos = getItemPosFromIndexInInventory(index, x2, y2, cellsW, cellsH);
+
+      if (
+        checkIsMouseOverItem(pos.x, pos.y, 16, 16, keys.mouse.x, keys.mouse.y) &&
+        keys.mouse.click
+      ) {
+        console.log("jest over item");
+        this.mouseFlag = true;
+      }
+
+      if (
+        gameData.holdingItem[0] === null &&
+        !keys.mouse.click &&
+        this.mouseFlag === true &&
+        checkIsMouseOverItem(pos.x, pos.y, 16, 16, keys.mouse.x, keys.mouse.y)
+      ) {
+        addItemToInventory(item.item, gameData.holdingItem, false, item.stack);
+        console.log("dodaje item do myszki", gameData.holdingItem);
+
+        // remove from inventory
+        gameData.playerInventory.splice(index, 1, null);
+
+        this.mouseFlag = false;
+      }
+    });
   }
 }
 

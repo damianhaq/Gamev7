@@ -11,6 +11,7 @@ export const gameData = {
     isInventoryWindowOpen: true,
   },
   playerInventory: [],
+  holdingItem: [null],
 };
 
 export const keys = {
@@ -340,14 +341,14 @@ export const itemsData = {
         description: "Przywraca 100 HP",
         id: "potionRedBig",
         sprite: spriteSheetData.items.potions.red.big,
-        stackNumber: 10,
+        stackNumber: 7,
       },
       small: {
         name: "Czerwona mikstura mała",
         description: "Przywraca 50 HP",
         id: "potionRedSmall",
         sprite: spriteSheetData.items.potions.red.small,
-        stackNumber: 10,
+        stackNumber: 7,
       },
     },
   },
